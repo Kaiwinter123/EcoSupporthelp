@@ -1,0 +1,728 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="A plain-English guide and support desk for Ecotime time and attendance software.">
+<title>Ecotime Field Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: sticky left rail of chapters + one reading column; a "clock card" motif for times and menu paths */
+:root{
+  --bg:#f3f5f7; --surface:#ffffff; --ink:#15202b; --muted:#56636f; --line:#d9dfe5;
+  --accent:#c2620a; --accent-soft:#fbecdc; --ok:#1f7a4d; --ok-soft:#dff2e8; --hold:#8a5a00; --hold-soft:#fff3d1; --err:#b3261e; --err-soft:#fbe3e1;
+  --code-bg:#e9edf1;
+  --f-display:"Archivo", "Helvetica Neue", Arial, sans-serif;
+  --f-body:"IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono:"IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0f151b; --surface:#172029; --ink:#e6ebf0; --muted:#9aa7b3; --line:#2a3642;
+  --accent:#f0913a; --accent-soft:#3a2614; --ok:#5fcf95; --ok-soft:#14301f; --hold:#f2c25b; --hold-soft:#332810; --err:#ff8a80; --err-soft:#3a1715;
+  --code-bg:#1f2a35; color-scheme:dark }}
+:root[data-theme="dark"]{
+  --bg:#0f151b; --surface:#172029; --ink:#e6ebf0; --muted:#9aa7b3; --line:#2a3642;
+  --accent:#f0913a; --accent-soft:#3a2614; --ok:#5fcf95; --ok-soft:#14301f; --hold:#f2c25b; --hold-soft:#332810; --err:#ff8a80; --err-soft:#3a1715;
+  --code-bg:#1f2a35; color-scheme:dark }
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:16px/1.6 var(--f-body);margin:0}
+a{color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:3px}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;line-height:1.15;margin:0}
+h2{font-size:1.75rem;font-weight:800;letter-spacing:-.01em}
+h3{font-size:1.15rem;font-weight:700}
+p{margin:0}
+.wrap{max-width:1180px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.layout{display:grid;grid-template-columns:220px minmax(0,1fr);gap:48px;padding-block:32px 80px}
+@media (max-width:860px){.layout{grid-template-columns:minmax(0,1fr);gap:24px}}
+
+/* header */
+header.top{border-bottom:1px solid var(--line);background:var(--surface)}
+header.top .wrap{padding-block:40px 36px;display:grid;gap:18px}
+.eyebrow{font:500 .75rem/1 var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+h1{font-size:clamp(2.2rem,5vw,3.4rem);font-weight:800;letter-spacing:-.02em}
+.lede{max-width:62ch;color:var(--muted);font-size:1.08rem}
+.card-strip{display:flex;flex-wrap:wrap;gap:8px;font:500 .8rem/1 var(--f-mono)}
+.punch{border:1px dashed var(--line);border-radius:4px;padding:8px 10px;color:var(--muted)}
+.punch b{color:var(--ink);font-weight:500}
+
+/* nav */
+nav.rail{position:sticky;top:calc(env(safe-area-inset-top,0px) + 20px);align-self:start;display:grid;gap:2px}
+nav.rail a{display:block;padding:7px 10px;border-radius:6px;color:var(--muted);text-decoration:none;font-size:.93rem}
+nav.rail a:hover{background:var(--surface);color:var(--ink)}
+nav.rail a.on{background:var(--surface);color:var(--ink);box-shadow:inset 3px 0 0 var(--accent)}
+nav.rail .lbl{font:500 .7rem/1 var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding:0 10px 8px}
+@media (max-width:860px){
+  nav.rail{position:static;display:flex;flex-wrap:wrap;gap:6px}
+  nav.rail .lbl{width:100%;padding:0 0 4px}
+  nav.rail a{border:1px solid var(--line);padding:6px 10px;font-size:.85rem}
+  nav.rail a.on{box-shadow:none;border-color:var(--accent)}
+}
+
+main{display:grid;gap:72px;min-width:0}
+section{display:grid;gap:20px;scroll-margin-top:24px}
+.prose{display:grid;gap:14px;max-width:68ch}
+.sub{color:var(--muted)}
+
+/* menu path breadcrumb */
+.path{font:500 .82rem/1.4 var(--f-mono);background:var(--code-bg);border-radius:4px;padding:2px 7px;white-space:nowrap}
+.path i{font-style:normal;color:var(--accent);padding:0 3px}
+kbd{font:500 .8rem var(--f-mono);border:1px solid var(--line);border-bottom-width:2px;border-radius:4px;padding:1px 6px;background:var(--surface)}
+
+/* pipeline */
+.pipe{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:0;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--surface)}
+.pipe button{all:unset;cursor:pointer;padding:16px 14px;display:grid;gap:6px;border-right:1px solid var(--line);position:relative}
+.pipe button:last-child{border-right:0}
+.pipe button:hover{background:var(--bg)}
+.pipe button[aria-selected="true"]{background:var(--accent-soft)}
+.pipe button[aria-selected="true"]::after{content:"";position:absolute;left:0;right:0;bottom:0;height:3px;background:var(--accent)}
+.pipe .n{font:500 .72rem/1 var(--f-mono);color:var(--muted)}
+.pipe .t{font:700 .98rem/1.2 var(--f-display)}
+.pipe .d{font-size:.8rem;color:var(--muted);line-height:1.35}
+@media (max-width:860px){.pipe{grid-template-columns:repeat(2,minmax(0,1fr))}.pipe button{border-bottom:1px solid var(--line)}.pipe button:nth-child(2n){border-right:0}}
+.stage-detail{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:20px 22px;display:grid;gap:10px}
+.stage-detail ul{margin:0;padding-left:20px;display:grid;gap:6px}
+
+/* steps */
+ol.steps{list-style:none;margin:0;padding:0;display:grid;gap:0;counter-reset:s}
+ol.steps>li{counter-increment:s;display:grid;grid-template-columns:44px minmax(0,1fr);gap:14px;padding:16px 0;border-top:1px solid var(--line)}
+ol.steps>li:first-child{border-top:0}
+ol.steps>li::before{content:counter(s,decimal-leading-zero);font:500 .9rem/1 var(--f-mono);color:var(--accent);padding-top:4px}
+ol.steps h3{margin-bottom:4px}
+ol.steps p{color:var(--muted)}
+
+/* week roster */
+.scroll{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:.9rem}
+th,td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{font:500 .72rem/1.2 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+tr:last-child td{border-bottom:0}
+.week td{font:500 .82rem/1.3 var(--f-mono);min-width:92px}
+.week td.rowh{font:600 .88rem var(--f-body);min-width:130px}
+.chip{display:inline-block;padding:3px 8px;border-radius:999px;font:500 .76rem/1.3 var(--f-mono);white-space:nowrap}
+.c-pat{background:var(--code-bg);color:var(--ink)}
+.c-ros{background:var(--accent-soft);color:var(--accent);border:1px solid var(--accent)}
+.c-off{color:var(--muted)}
+.c-ok{background:var(--ok-soft);color:var(--ok)}
+.c-hold{background:var(--hold-soft);color:var(--hold)}
+.c-err{background:var(--err-soft);color:var(--err)}
+.toggle{display:flex;gap:8px;flex-wrap:wrap}
+.toggle button{font:500 .85rem var(--f-body);border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:7px 14px;cursor:pointer}
+.toggle button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+
+/* two-way compare */
+.compare{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+@media (max-width:700px){.compare{grid-template-columns:minmax(0,1fr)}}
+.opt{border:1px solid var(--line);border-radius:10px;background:var(--surface);padding:20px;display:grid;gap:12px;align-content:start}
+.opt .when{font:500 .75rem/1 var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--accent)}
+.opt ul{margin:0;padding-left:20px;display:grid;gap:6px}
+
+/* simulator */
+.sim{border:1px solid var(--line);border-radius:10px;background:var(--surface);padding:20px;display:grid;gap:18px}
+.sim-row{display:flex;flex-wrap:wrap;gap:14px;align-items:end}
+.sim label{display:grid;gap:4px;font-size:.82rem;color:var(--muted)}
+.sim input[type=time],.sim input[type=number]{font:500 1rem var(--f-mono);padding:7px 9px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);width:120px}
+.bar{display:flex;height:34px;border-radius:6px;overflow:hidden;border:1px solid var(--line)}
+.bar div{display:flex;align-items:center;justify-content:center;font:500 .78rem var(--f-mono);white-space:nowrap;overflow:hidden;transition:flex-basis .25s}
+.bar .b-norm{background:var(--code-bg);color:var(--ink)}
+.bar .b-hold{background:var(--hold-soft);color:var(--hold)}
+.bar .b-ok{background:var(--ok-soft);color:var(--ok)}
+.ledger{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+@media (max-width:560px){.ledger{grid-template-columns:minmax(0,1fr)}}
+.ledger div{border:1px solid var(--line);border-radius:8px;padding:10px 12px;display:grid;gap:2px}
+.ledger span{font-size:.78rem;color:var(--muted)}
+.ledger b{font:500 1.3rem var(--f-mono);font-variant-numeric:tabular-nums}
+.btn{font:600 .9rem var(--f-body);border:0;border-radius:6px;padding:9px 16px;cursor:pointer;background:var(--accent);color:#fff}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.note{font-size:.85rem;color:var(--muted)}
+.flag{border-left:3px solid var(--hold);background:var(--hold-soft);padding:12px 14px;border-radius:0 8px 8px 0;font-size:.92rem;color:var(--ink)}
+
+/* checklist */
+.check{list-style:none;margin:0;padding:0;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+.check li{border-top:1px solid var(--line)}
+.check li:first-child{border-top:0}
+.check label{display:grid;grid-template-columns:22px minmax(0,1fr);gap:12px;padding:14px 16px;cursor:pointer}
+.check input{width:18px;height:18px;margin-top:3px;accent-color:var(--ok)}
+.check .w{color:var(--muted);font-size:.88rem;display:block}
+.check input:checked + span b{text-decoration:line-through;color:var(--muted)}
+.progress{display:flex;align-items:center;gap:12px;font:500 .85rem var(--f-mono);color:var(--muted)}
+.progress .track{flex:1;height:6px;background:var(--line);border-radius:3px;overflow:hidden}
+.progress .fill{height:100%;background:var(--ok);width:0;transition:width .2s}
+.light{display:inline-flex;align-items:center;gap:6px}
+.light::before{content:"";width:10px;height:10px;border-radius:50%;background:var(--err)}
+.light.go::before{background:var(--ok)}
+
+/* glossary */
+.search{font:1rem var(--f-body);padding:11px 14px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink);width:100%;max-width:420px}
+.gloss{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0;border:1px solid var(--line);border-radius:10px;background:var(--surface);overflow:hidden}
+@media (max-width:700px){.gloss{grid-template-columns:minmax(0,1fr)}}
+.gloss div{padding:14px 16px;border-bottom:1px solid var(--line);display:grid;gap:4px;min-width:0}
+.gloss dt{font:600 .95rem var(--f-body)}
+.gloss dd{margin:0;color:var(--muted);font-size:.9rem}
+.empty{padding:16px;color:var(--muted)}
+
+/* support desk */
+.desk{display:grid;grid-template-columns:260px minmax(0,1fr);border:1px solid var(--line);border-radius:12px;background:var(--surface);overflow:hidden}
+@media (max-width:760px){.desk{grid-template-columns:minmax(0,1fr)}}
+.symptoms{display:grid;align-content:start;border-right:1px solid var(--line);background:var(--bg)}
+@media (max-width:760px){.symptoms{border-right:0;border-bottom:1px solid var(--line);grid-template-columns:repeat(2,minmax(0,1fr))}}
+.symptoms button{all:unset;cursor:pointer;padding:12px 16px;border-bottom:1px solid var(--line);display:grid;gap:2px;font-size:.92rem}
+.symptoms button small{font:500 .7rem var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.symptoms button:hover{background:var(--surface)}
+.symptoms button[aria-selected="true"]{background:var(--surface);box-shadow:inset 3px 0 0 var(--accent);font-weight:600}
+.diag{padding:22px 24px;display:grid;gap:18px;min-width:0;align-content:start}
+.diag .said{font:500 1.05rem/1.4 var(--f-display);border-left:3px solid var(--line);padding-left:12px;color:var(--muted)}
+.diag h4{font:500 .72rem/1 var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:0 0 8px}
+.causes{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.causes li{border:1px solid var(--line);border-radius:8px;padding:12px 14px;display:grid;gap:6px}
+.causes .ch{display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}
+.causes .rank{font:500 .75rem var(--f-mono);color:var(--accent)}
+.causes .ct{font-weight:600}
+.causes p{color:var(--muted);font-size:.92rem}
+.causes p b{color:var(--ink)}
+.tag{font:500 .68rem/1 var(--f-mono);letter-spacing:.06em;text-transform:uppercase;padding:4px 6px;border-radius:4px;white-space:nowrap}
+.tag.doc{background:var(--ok-soft);color:var(--ok)}
+.tag.tip{background:var(--code-bg);color:var(--muted)}
+.escalate{background:var(--err-soft);border-radius:8px;padding:12px 14px;font-size:.92rem}
+.escalate b{color:var(--err)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:.85rem;color:var(--muted);align-items:center}
+.ticket{font:400 .85rem/1.6 var(--f-mono);background:var(--code-bg);border-radius:8px;padding:14px 16px;white-space:pre-wrap;margin:0;overflow-x:auto}
+.cols{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+@media (max-width:700px){.cols{grid-template-columns:minmax(0,1fr)}}
+.panel{border:1px solid var(--line);border-radius:10px;background:var(--surface);padding:18px 20px;display:grid;gap:10px;align-content:start;min-width:0}
+.panel ul{margin:0;padding-left:20px;display:grid;gap:6px;font-size:.93rem}
+.seq{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font:500 .8rem var(--f-mono)}
+.seq .arrow{color:var(--muted)}
+
+.sources{font-size:.88rem;color:var(--muted);display:grid;gap:6px;padding-left:20px;margin:0}
+footer{border-top:1px solid var(--line);padding-block:24px;color:var(--muted);font-size:.85rem}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+html{scroll-behavior:smooth}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <div class="eyebrow">Time &amp; attendance · plain-English guide</div>
+    <h1>Ecotime Field Guide</h1>
+    <p class="lede">The official docs explain each screen on its own. This guide starts with how the pieces fit together: what happens to a clocking between the terminal and the payroll file, how shifts and rosters decide what someone should work, and the two ways to handle overtime.</p>
+    <div class="card-strip" aria-hidden="true">
+      <span class="punch">IN <b>07:58</b></span><span class="punch">OUT <b>17:04</b></span><span class="punch">DAY SHIFT <b>DAY8</b></span><span class="punch">CATEGORY <b>NORMAL 8.00</b></span><span class="punch">HOLD <b>OT 1.00</b></span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap layout">
+  <nav class="rail" aria-label="Chapters">
+    <div class="lbl">Chapters</div>
+    <a href="#big-picture">The big picture</a>
+    <a href="#support">Support desk</a>
+    <a href="#breaks">Breaks &amp; clockings</a>
+    <a href="#setup">Setting it up</a>
+    <a href="#shifts">Shifts &amp; rosters</a>
+    <a href="#overtime">Overtime</a>
+    <a href="#daily">Daily routine</a>
+    <a href="#errors">Fixing errors</a>
+    <a href="#leave">Leave</a>
+    <a href="#glossary">Glossary</a>
+    <a href="#sources">Sources</a>
+  </nav>
+
+  <main>
+    <!-- BIG PICTURE -->
+    <section id="big-picture">
+      <h2>The big picture</h2>
+      <div class="prose">
+        <p>Ecotime does one job: it turns raw clockings into payable hours. Everything else in the software is a setting that controls one step of that journey. Learn the journey first and the screens start to make sense.</p>
+        <p class="sub">Select a stage to see what happens there and which screens you use.</p>
+      </div>
+      <div class="pipe" role="tablist" aria-label="How a clocking becomes pay" id="pipe"></div>
+      <div class="stage-detail" id="stage" role="tabpanel" aria-live="polite"></div>
+    </section>
+
+    <!-- SUPPORT DESK -->
+    <section id="support">
+      <div class="eyebrow">For support staff</div>
+      <h2>Support desk</h2>
+      <div class="prose">
+        <p>Most Ecotime calls are about one thing: <b>the hours on screen don't match what the person thinks they worked.</b> The cause is nearly always one of three places. Either the clockings are wrong, the wrong shift was applied that day, or an error is stopping the calculation. Pick what the caller is reporting to see the likely causes, most common first.</p>
+      </div>
+      <div class="legend"><span class="tag doc">From docs</span> stated in the official Eco Time documentation <span class="tag tip">Support tip</span> general time and attendance practice. Confirm it on the customer's setup.</div>
+      <div class="desk">
+        <div class="symptoms" role="tablist" aria-label="What is the caller reporting?" id="symptoms"></div>
+        <div class="diag" role="tabpanel" id="diag" aria-live="polite"></div>
+      </div>
+
+      <h3>Always check in this order</h3>
+      <div class="prose"><p>This is the same journey from <a href="#big-picture">The big picture</a>, used as a checklist. Don't skip ahead to the shift rules until the clockings are right. Bad clockings make every rule look broken.</p></div>
+      <ol class="steps">
+        <li><div><h3>Clockings for the day</h3><p>Open the employee's clockings for the date range. Are they all there, and do they alternate IN, OUT, IN, OUT? A <b>hand icon</b> means someone already edited that clocking by hand, and the original values are still shown.</p></div></li>
+        <li><div><h3>The shift Ecotime used</h3><p>Check the Daily Roster for that date. Is there a roster entry? If not, which payroll shift is the employee on? Did someone change it recently?</p></div></li>
+        <li><div><h3>Errors and warnings</h3><p>A red stop sign means hours aren't calculating properly yet. Clear the errors first. Warnings, such as a late start, don't block anything. They are only flags.</p></div></li>
+        <li><div><h3>Daily hours</h3><p>In <b>Browse Daily Hours</b>, look at which categories the time landed in. Is the overtime sitting in holding, waiting for authorisation?</p></div></li>
+        <li><div><h3>Payroll hours</h3><p>In <b>Browse Employee Payroll Hours</b>, check the period totals. Is leave there? Is the period starting on the right day?</p></div></li>
+        <li><div><h3>Process, then check again</h3><p>After any fix, press <b>Process</b> on the clocking, or use <b>Reprocess Hours</b> for a date range, and confirm the numbers changed.</p></div></li>
+      </ol>
+
+      <h3>Log the call</h3>
+      <div class="cols">
+        <div class="panel">
+          <h4 class="eyebrow" style="margin:0">Ask the caller</h4>
+          <ul>
+            <li>Which employee number, and which <b>exact date</b>?</li>
+            <li>What did they actually work, start to finish, and did they take a break?</li>
+            <li>What does Ecotime show, and what did they expect?</li>
+            <li>Is it one person, a group, or everyone?</li>
+            <li>Did anything change recently, such as a new shift, a roster import or someone editing clockings?</li>
+            <li>Is the stop sign red or green?</li>
+            <li>When is payroll due? This sets how urgent the call is.</li>
+          </ul>
+        </div>
+        <div class="panel">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap"><h4 class="eyebrow" style="margin:0">Ticket template</h4><button type="button" class="btn ghost" id="copy-ticket">Copy</button></div>
+<pre class="ticket" id="ticket">Site / customer:
+Employee no(s):
+Date(s) affected:
+Symptom (caller's words):
+Expected hours:        Shown hours:
+Scope: one / group / all
+Stop sign: red / green
+Clockings correct?  Y / N  (notes)
+Shift used that day:
+Recent changes:
+Action taken:
+Reprocessed? Y / N   Result:
+Escalated to:</pre>
+        </div>
+      </div>
+
+      <div class="flag"><b>Ecotime or Evotime?</b> Clocking Systems also support a different product called <b>Evotime</b>, and many of its articles cover rounding, grace periods and "shift balancing". Those settings belong to Evotime. Before you follow an article, check which product it's for.</div>
+    </section>
+
+    <!-- BREAKS & CLOCKINGS -->
+    <section id="breaks">
+      <h2>Breaks &amp; clockings</h2>
+      <div class="prose">
+        <p>Break problems come in two kinds. First, find out whether the site makes staff <b>clock out and back in for breaks</b> or <b>deducts breaks automatically</b>. Many sites do one or the other, and the fix is completely different.</p>
+      </div>
+      <div class="cols">
+        <div class="panel">
+          <div class="when eyebrow">Staff clock for breaks</div>
+          <h3>Four clockings a day</h3>
+          <div class="seq"><span class="chip c-ok">IN 08:00</span><span class="arrow">→</span><span class="chip c-hold">OUT 12:30</span><span class="arrow">→</span><span class="chip c-ok">IN 13:00</span><span class="arrow">→</span><span class="chip c-hold">OUT 17:00</span></div>
+          <ul>
+            <li>Forgetting the break clock-in leaves <b>OUT, OUT</b>, which gives a same-direction error. <span class="tag doc">From docs</span></li>
+            <li>An odd number of clockings means one is missing, or one is a double tap. <span class="tag tip">Support tip</span></li>
+            <li>Fix it in the clockings list. Highlight the wrong one and press <kbd>Ctrl</kbd>+<kbd>A</kbd> or <kbd>F2</kbd> to change its direction, or delete the duplicate. <span class="tag doc">From docs</span></li>
+          </ul>
+        </div>
+        <div class="panel">
+          <div class="when eyebrow">Breaks deducted automatically</div>
+          <h3>Two clockings, rule takes the break</h3>
+          <div class="seq"><span class="chip c-ok">IN 08:00</span><span class="arrow">→</span><span class="chip c-pat">rule −0:30</span><span class="arrow">→</span><span class="chip c-hold">OUT 17:00</span></div>
+          <ul>
+            <li>The deduction lives in the setup. That means the daily shift's rules or a <b>macro script</b>. The docs include an example called "Using AddClocking to deduct breaks". <span class="tag doc">From docs</span></li>
+            <li>A <b>CountTime</b> macro can total the time out between clockings, for sites that cap or check break length. <span class="tag doc">From docs</span></li>
+            <li>If the break is wrong for <i>everyone</i> on a shift, it's the shift or the macro. If it's wrong for one person, look at their clockings or their shift for that day. <span class="tag tip">Support tip</span></li>
+            <li>Don't edit macro scripts without the customer's consultant. A mistake there affects every employee. <span class="tag tip">Support tip</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <h3>Working with clockings</h3>
+      <div class="scroll">
+        <table>
+          <thead><tr><th>Task</th><th>How</th></tr></thead>
+          <tbody>
+            <tr><td>View clockings</td><td>Use the <b>Clockings</b> toolbar button and pick a date range. You can filter to one group.</td></tr>
+            <tr><td>Add a missing clocking</td><td>Choose the employee, dates, time and <b>direction</b>. Tick <b>Pay Clocking</b> if it should count towards hours. The other boxes are Info, Job and Access clockings.</td></tr>
+            <tr><td>Change direction</td><td>Highlight it in the list and press <kbd>Ctrl</kbd>+<kbd>A</kbd> or <kbd>F2</kbd>. Note that in the <i>hours</i> view, Ctrl-A authorises overtime instead.</td></tr>
+            <tr><td>Spot edited clockings</td><td>A <b>hand icon</b> marks a manual change. The original information is still shown.</td></tr>
+            <tr><td>Recalculate one</td><td>Press <b>Process</b> to rebuild the record. Do this after an add or change if the hours haven't updated.</td></tr>
+            <tr><td>Recalculate a range</td><td><b>Reprocess Hours</b> on the web interface. Pick From/To dates and an employee group. This queues processing on the Server Module, so give it a little time.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="flag"><b>Roster import trap:</b> a roster import must cover all seven days of the week. If you import fewer days, existing rosters are removed. A later import for the same period replaces the earlier one, and a time of 0:00 is read as midnight. Past rosters can be imported, and the daily hours are reprocessed against them.</div>
+    </section>
+
+    <!-- SETUP -->
+    <section id="setup">
+      <h2>Setting it up, in order</h2>
+      <div class="prose">
+        <p>All setup lives in the <b>Configuration Module</b>. The docs stress that setting it up correctly avoids most later problems. The order matters because later items point at earlier ones. A payroll shift is built from daily shifts, and a daily shift is built from time categories.</p>
+      </div>
+      <ol class="steps">
+        <li><div><h3>Switch on the features you need</h3><p>Under <b>System Features</b> you decide which classifications are active and turn on optional features such as overtime authorisation. Do this first so the related fields show up later.</p></div></li>
+        <li><div><h3>Classifications</h3><p>These are the labels you file people under: Company, Branch, Department, Cost Centre, Category, Payscale, Type and Workgroup. You only need the ones that match how your business is organised.</p></div></li>
+        <li><div><h3>Group Selections</h3><p>Groups are saved selections of employees, built from classifications. You use them to filter screens, run reports and do bulk tasks. You can also define groups by the days of the week people are <i>available</i> to work.</p></div></li>
+        <li><div><h3>Leave types and public holidays</h3><p>Leave types have to exist here before anyone can book leave against them. Public holidays let the processor generate paid holiday hours.</p></div></li>
+        <li><div><h3>Shift Time Categories</h3><p>These are the buckets hours are sorted into, such as Normal Time and Overtime. Ecotime ships with some that you can edit. If you plan to authorise overtime, you create the holding and authorised categories here (see <a href="#overtime">Overtime</a>).</p></div></li>
+        <li><div><h3>Shift Time Rates</h3><p>The rates attached to those categories. <span class="path">Setup<i>›</i>Shifts<i>›</i>Shift Time Rates</span></p></div></li>
+        <li><div><h3>Daily shifts</h3><p>You create one daily shift for each <i>type of day</i> people can work, such as an early, a late, a night or a day off. Each one has its expected times and its rules for sorting hours into categories. <span class="path">Setup<i>›</i>Shifts<i>›</i>Daily shifts</span></p></div></li>
+        <li><div><h3>Payroll shifts</h3><p>A payroll shift strings daily shifts together into a full pay period, such as a week of Mon–Fri days plus two days off. Set the <b>Payroll Shift Start Day</b> so the period starts on the right weekday. <b>Every employee must be on a payroll shift</b>, or Ecotime can't calculate their hours.</p></div></li>
+        <li><div><h3>Clocks (terminals)</h3><p>Register the clocking hardware with <b>Edit Clocks</b>. This tells Ecotime where clockings come from.</p></div></li>
+        <li><div><h3>Employees</h3><p>Add each person and give them their card, their classifications and, most importantly, their payroll shift.</p></div></li>
+      </ol>
+    </section>
+
+    <!-- SHIFTS -->
+    <section id="shifts">
+      <h2>Shifts &amp; rosters</h2>
+      <div class="prose">
+        <p>This is the part people get stuck on. There are two layers.</p>
+        <p><b>The pattern</b> is the payroll shift. It is the employee's normal, repeating week, and Ecotime falls back on it every day unless told otherwise.</p>
+        <p><b>The roster</b> is a one-off instruction for a specific date: "On Thursday the 14th, this person works the Late shift." A roster entry overrides the pattern for that day only. Use rostering when people work varying shift times with no fixed pattern, or for one-off changes such as a swap or an extra day.</p>
+      </div>
+
+      <div class="toggle" role="group" aria-label="Show roster layer">
+        <button type="button" id="t-pat" aria-pressed="true">Pattern only</button>
+        <button type="button" id="t-ros" aria-pressed="false">Pattern + roster</button>
+      </div>
+      <div class="scroll">
+        <table class="week" aria-label="Example week for one employee">
+          <thead><tr><th>Example employee</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th><th>Sun</th></tr></thead>
+          <tbody>
+            <tr><td class="rowh">Payroll shift (pattern)</td><td><span class="chip c-pat">DAY 08–17</span></td><td><span class="chip c-pat">DAY 08–17</span></td><td><span class="chip c-pat">DAY 08–17</span></td><td><span class="chip c-pat">DAY 08–17</span></td><td><span class="chip c-pat">DAY 08–17</span></td><td><span class="chip c-off">OFF</span></td><td><span class="chip c-off">OFF</span></td></tr>
+            <tr id="ros-row" hidden><td class="rowh">Daily roster entries</td><td></td><td></td><td></td><td><span class="chip c-ros">LATE 14–22</span></td><td></td><td><span class="chip c-ros">OT 08–12</span></td><td></td></tr>
+            <tr><td class="rowh">What Ecotime expects</td><td id="e1"></td><td id="e2"></td><td id="e3"></td><td id="e4"></td><td id="e5"></td><td id="e6"></td><td id="e7"></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="note">Example shift names. Your system will use whatever codes your administrator set up.</p>
+
+      <h3>Ways to roster someone</h3>
+      <ol class="steps">
+        <li><div><h3>One person, one day: the Daily Roster window</h3><p>Open <b>Daily Roster</b> to see and manage rostering for all employees. Switch to the <b>Calendar</b> option for a visual view over a chosen number of days from a start date. To change a day, <b>right-click the day</b> and pick a daily shift from the drop-down list. That adds a new daily roster entry for that date.</p></div></li>
+        <li><div><h3>Many people at once: Bulk Tasks</h3><p>The bulk menus let you add, swap or remove daily shift rosters for a whole group in one go. You can also add daily overtime authorisations for a group the same way.</p></div></li>
+        <li><div><h3>Supervisors: the web interface</h3><p>Supervisors can put an employee on a new rostered shift or change an existing one from Eco Time Web, without the desktop software.</p></div></li>
+        <li><div><h3>From a spreadsheet: Importing Daily Shift Rosters</h3><p>Rosters can be imported using the generic import format. Re-importing the same roster for the same period <b>overrides</b> what's already there, so you can correct a file and import it again.</p></div></li>
+      </ol>
+    </section>
+
+    <!-- OVERTIME -->
+    <section id="overtime">
+      <h2>Overtime: roster it, or authorise it</h2>
+      <div class="prose">
+        <p>There are two ways to control overtime. They answer different questions. Rostering asks "did we plan this?" and authorisation asks "do we approve this?" You can use either one, or both.</p>
+      </div>
+      <div class="compare">
+        <div class="opt">
+          <div class="when">Before the work · planned</div>
+          <h3>Roster the overtime</h3>
+          <p>If you know in advance that someone is coming in extra, put them on a rostered shift for that day, such as a Saturday overtime shift. Ecotime then expects them and their hours fall into that shift's categories.</p>
+          <ul>
+            <li>Good for planned weekend work or cover.</li>
+            <li>Done in the Daily Roster window, by bulk roster, on the web or by import.</li>
+            <li>The manager decides ahead of time, not afterwards.</li>
+          </ul>
+        </div>
+        <div class="opt">
+          <div class="when">After the work · approval</div>
+          <h3>Authorise the overtime</h3>
+          <p>Extra hours go into a <b>holding</b> category and stay there, unpaid, until a manager approves them. Approval moves them into the <b>authorised</b> category that payroll picks up.</p>
+          <ul>
+            <li>Good for stopping unapproved stay-backs from being paid automatically.</li>
+            <li>Can work per day (<b>Daily Overtime Authorisations</b>) or per pay period (<b>Payroll Authorisations</b>).</li>
+            <li>Hours that aren't approved don't get paid.</li>
+          </ul>
+        </div>
+      </div>
+
+      <h3>Try it: what authorisation does to a day</h3>
+      <div class="sim">
+        <div class="sim-row">
+          <label for="s-in">Clocked in<input type="time" id="s-in" value="08:00"></label>
+          <label for="s-out">Clocked out<input type="time" id="s-out" value="19:30"></label>
+          <label for="s-norm">Normal hours on shift<input type="number" id="s-norm" value="9" min="0" max="24" step="0.5"></label>
+          <button type="button" class="btn" id="s-auth">Authorise (Ctrl-A)</button>
+          <button type="button" class="btn ghost" id="s-reset">Reset</button>
+        </div>
+        <div class="bar" id="s-bar" aria-hidden="true"></div>
+        <div class="ledger">
+          <div><span>Normal time</span><b id="l-norm">0.00</b></div>
+          <div><span>Overtime holding (not paid yet)</span><b id="l-hold">0.00</b></div>
+          <div><span>Overtime authorised (paid)</span><b id="l-ok">0.00</b></div>
+        </div>
+        <p class="note">This is a simplified model for learning. Real daily shifts can also apply breaks, rounding and other rules, so your actual figures depend on how your shifts are set up.</p>
+      </div>
+
+      <h3>Setting up overtime authorisation</h3>
+      <ol class="steps">
+        <li><div><h3>Turn the feature on</h3><p>In the Configuration Module's features, go to the <b>Standard</b> tab and tick <b>Daily Overtime Authorisations</b>, <b>Payroll Authorisations</b> or both.</p></div></li>
+        <li><div><h3>Create the holding category</h3><p>Add a Shift Time Category to hold worked-but-unapproved overtime. Leave its <b>Requires Authorisation</b> boxes <b>unticked</b>. That sounds backwards, but this is the category that holds hours waiting for approval. It is not the one that needs approving.</p></div></li>
+        <li><div><h3>Create the authorised category</h3><p>Add the category approved hours move into, and tick <b>Requires Authorisation</b> for the type you use (Daily and/or Payroll).</p></div></li>
+        <li><div><h3>Point your shifts at the holding category</h3><p>In your daily shift rules, send overtime to the holding category instead of straight to a paid overtime category.</p></div></li>
+        <li><div><h3>Approve</h3><p>In <b>Browse Daily Hours</b> (daily) or the payroll hours view (per period), select the record and press <kbd>Ctrl</kbd>+<kbd>A</kbd>. Everything in the holding categories moves to the authorised ones. For groups, use the bulk option to add daily overtime authorisations.</p></div></li>
+      </ol>
+      <p class="flag">Remember: if authorisation is switched on, nobody gets paid for that overtime until someone approves it. Add approval to your routine before every payroll export.</p>
+    </section>
+
+    <!-- DAILY -->
+    <section id="daily">
+      <h2>Your daily and payroll routine</h2>
+      <div class="prose">
+        <p>This is the checklist from the official "Daily and Payroll Tasks" page, in order. Tick items off as you go. Your ticks are saved in this browser only.</p>
+      </div>
+      <div class="progress"><span id="p-light" class="light">Errors outstanding</span><div class="track"><div class="fill" id="p-fill"></div></div><span id="p-count">0 / 7</span></div>
+      <ul class="check" id="checklist"></ul>
+      <div><button type="button" class="btn ghost" id="c-reset">Clear ticks</button></div>
+    </section>
+
+    <!-- ERRORS -->
+    <section id="errors">
+      <h2>Fixing errors</h2>
+      <div class="prose">
+        <p>Ecotime shows a <b>red stop sign</b> while errors remain and a <b>green</b> one once they're cleared. All errors must be fixed before the payroll calculation runs for export. Nearly every error is one of these four.</p>
+      </div>
+      <div class="scroll">
+        <table>
+          <thead><tr><th>Error</th><th>What it means</th><th>How to fix it</th></tr></thead>
+          <tbody>
+            <tr><td><span class="chip c-err">Missing clock-out</span></td><td>They clocked in but never out, so the shift is incomplete. Hours are only worked out once an OUT is found.</td><td>Highlight the error, click <b>Fix</b> and add the missing OUT clocking by hand.</td></tr>
+            <tr><td><span class="chip c-err">Missing daily hours</span></td><td>No hours for the day. This is usually a side-effect of a missing clock-out.</td><td>Fix the missing clock-out first. This error normally clears with it.</td></tr>
+            <tr><td><span class="chip c-err">Two clockings, same direction</span></td><td>For example, IN then IN. Someone double-tapped, or clocked the wrong way.</td><td>Highlight the error, then change the direction or delete the wrong clocking in the clockings window.</td></tr>
+            <tr><td><span class="chip c-err">Invalid shift code</span></td><td>The employee is pointing at a shift code that doesn't exist or isn't valid.</td><td>Check the employee's payroll shift and roster entries, and correct the code.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="prose">
+        <h3>No clockings showing at all?</h3>
+        <p>If the <b>Global clockings</b> window is empty, the usual cause is that the <b>Server Module isn't running</b>. On the Windows server, look for the service named <span class="path">EcoTimeServer</span>, <span class="path">CSTimeServer</span> or <span class="path">TNAServer</span> and start it. If it's running and still nothing arrives, the clock may be offline. Contact your Ecotime supplier.</p>
+        <p>A clocking outside the shift's times, such as a late start, gives a <b>warning</b> rather than an automatic change. Warnings feed the late-start, early-departure and absenteeism reports.</p>
+      </div>
+    </section>
+
+    <!-- LEAVE -->
+    <section id="leave">
+      <h2>Leave</h2>
+      <div class="prose">
+        <p>An employee with no clockings for a day counts as <b>absent</b>. If they were on holiday or off sick, record leave so the day is explained and paid correctly.</p>
+      </div>
+      <ol class="steps">
+        <li><div><h3>Make sure the leave type exists</h3><p>Leave types are set up in the Configuration Module. You can't book leave against a type that doesn't exist.</p></div></li>
+        <li><div><h3>Add the leave</h3><p>On the <b>Leave Option</b> screen, click <b>Insert</b> to open <b>Update Leave</b>. Choose the leave type and set the <b>From</b> and <b>To</b> dates. Two entries of the same type can't start on the same date.</p></div></li>
+        <li><div><h3>Hours by hand, if needed</h3><p>The <b>Add Daily Hours</b> and <b>Add Payroll Hours</b> tabs let you type leave hours in directly. <b>Insert</b> and <b>Change</b> only become available once you pick a leave type on the <b>General</b> tab that allows manual hours.</p></div></li>
+        <li><div><h3>Employees can request it</h3><p>The Eco Mobile App has a <b>Leave Request</b> option where staff choose the leave type and dates themselves.</p></div></li>
+      </ol>
+    </section>
+
+    <!-- GLOSSARY -->
+    <section id="glossary">
+      <h2>Glossary</h2>
+      <label for="g-q" class="sub">Search the terms Ecotime uses</label>
+      <input id="g-q" class="search" type="search" placeholder="e.g. holding, roster, payroll shift" autocomplete="off">
+      <dl class="gloss" id="gloss"></dl>
+    </section>
+
+    <!-- SOURCES -->
+    <section id="sources">
+      <h2>Sources &amp; gaps</h2>
+      <div class="prose">
+        <p>This guide is based on the official Eco Time documentation. Some of those pages are several years old, so menu names in your version may differ slightly. The official docs I could find don't explain <b>rounding, grace periods or automatic break deductions</b>, so the guide doesn't give exact settings for them. It does say where to look: the daily shift rules and macro scripts. The "Support tip" items are general time and attendance practice, not quotes from the docs.</p>
+      </div>
+      <ul class="sources">
+        <li><a href="https://docs.eco-time.com/indexpage?page=MjkzM1FRNTUwMDFNOUpHUg%3D%3D" target="_blank" rel="noopener">Eco Time: Configuration Module</a></li>
+        <li><a href="https://docs.eco-time.com/indexpage?page=TDE4Q1JVUjA1QURKNU4yTw%3D%3D" target="_blank" rel="noopener">Eco Time: Setup</a></li>
+        <li><a href="https://docs.eco-time.com/IndexPage?page=WlVIRDdMQUhPMEJSMEswOA%3D%3D" target="_blank" rel="noopener">Eco Time: Daily and Payroll Tasks</a></li>
+        <li><a href="https://docs.eco-time.com/indexpage?page=NjBGMVUyWE9aUU5aWlAxQw%3D%3D" target="_blank" rel="noopener">Eco Time: Fixing Errors</a></li>
+        <li><a href="https://docs.eco-time.com/indexpage?page=TDNNSEFHQlZBMzIwVzMwSw%3D%3D" target="_blank" rel="noopener">Eco Time: No Clockings Collected</a></li>
+        <li><a href="https://docs.eco-time.com/IndexPage?page=Mjk4ODkxNzBIWjVHTkZWNQ%3D%3D" target="_blank" rel="noopener">Eco Time: Classifications &amp; Employee Groups</a></li>
+        <li><a href="https://docs.eco-time.com/indexpage?page=NElTSlk5RDZZVDc2NzlIUg%3D%3D" target="_blank" rel="noopener">Eco Time: Bulk Tasks</a></li>
+        <li><a href="https://docs.eco-time.com/indexpage?page=NTdGWUJCSjcwNFdCUkpEVQ%3D%3D" target="_blank" rel="noopener">Eco Time: Importing Daily Shift Rosters</a></li>
+        <li><a href="https://docs.eco-time.com/indexpage?page=TU9KQ1IwMVRTWkg4R0tNVg%3D%3D" target="_blank" rel="noopener">Eco Time: Using Eco Time Web Interface</a></li>
+        <li><a href="https://docs.eco-time.com/indexpage?page=SFFKUk9GWFo3SlMwQVJXWA%3D%3D" target="_blank" rel="noopener">Eco Time: Leave Option</a></li>
+        <li><a href="https://docs.eco-time.com/indexpage?page=VDc0QkRGTjAyVlBYNUVZSg%3D%3D" target="_blank" rel="noopener">Eco Time: Clockings</a></li>
+        <li><a href="https://docs.eco-time.com/indexpage?page=MTVMMjdPT0EyMDRHMUZJUQ%3D%3D" target="_blank" rel="noopener">Eco Time: Reprocess Hours</a></li>
+        <li><a href="https://docs.eco-time.com/indexpage?page=MkRVQzlFVTg1Q1pFSlMzSg%3D%3D" target="_blank" rel="noopener">Eco Time: CountTime (macro example)</a></li>
+        <li><a href="https://docs.eco-time.com/indexpage?page=SFdTSFJPWlBCQlNWOU01Qg%3D%3D" target="_blank" rel="noopener">Eco Time: System Errors</a></li>
+        <li><a href="https://docs.eco-time.com/indexpage?page=VzRNTUZRQ0hZTU05OTBOMQ%3D%3D" target="_blank" rel="noopener">Eco Time: TNA Procedures</a></li>
+        <li><a href="https://support.clockingsystems.co.uk/support/solutions/articles/103000093466-ecotime-shift-rostering-for-overtime-or-authorising-overtime" target="_blank" rel="noopener">Clocking Systems: Shift rostering for overtime or authorising overtime</a></li>
+      </ul>
+    </section>
+  </main>
+</div>
+<footer><div class="wrap">An unofficial learning aid. Not affiliated with Eco Time or Clocking Systems.</div></footer>
+
+<script>
+(function(){
+  const stages=[
+    {t:"Clockings",d:"Card taps arrive",body:"Staff tap their card or finger on a clock (terminal). The <b>Server Module</b> runs in the background and collects these clockings. Each one is just a time, a direction (IN or OUT) and an employee.",screens:["<b>Global clockings</b> shows everything collected","<b>Edit Clocks</b> (Configuration) registers terminals","If nothing appears, check the Server Module service is running"]},
+    {t:"Expected shift",d:"What should they work?",body:"For each day, Ecotime works out what the person was <i>supposed</i> to work. It looks for a <b>roster</b> entry for that date first, and falls back to their <b>payroll shift</b> pattern if there isn't one.",screens:["<b>Daily Roster</b> and its <b>Calendar</b> view","Employee record shows their payroll shift"]},
+    {t:"Daily hours",d:"Sorted into categories",body:"The day's clockings are matched against the daily shift's rules, and hours are sorted into <b>Shift Time Categories</b> such as Normal or Overtime. Hours are only calculated once an OUT clocking exists.",screens:["<b>Browse Daily Hours</b>","Errors and warnings show here (red or green stop sign)"]},
+    {t:"Authorise",d:"Optional approval",body:"If overtime authorisation is on, overtime sits in a <b>holding</b> category until a manager approves it. Approval moves it to the <b>authorised</b> category. Unapproved hours are not paid.",screens:["<b>Browse Daily Hours</b>: select the record, press Ctrl-A","Bulk Tasks for a whole group"]},
+    {t:"Payroll hours",d:"Totals for the period",body:"Daily hours roll up into the pay period defined by the <b>payroll shift</b>, which starts on the <b>Payroll Shift Start Day</b>. Leave and public holiday hours are added here.",screens:["<b>Browse Employee Payroll Hours</b>","Leave Option for booked leave"]},
+    {t:"Export",d:"Off to payroll",body:"Once errors are clear and hours are checked, <b>Export to Payroll</b> writes the hours in your payroll system's format, for example an ASCII file or a direct link such as Sage 300 or PaySpace.",screens:["<b>Export to Payroll</b>","Check hours first. Wrong hours mean wrong pay."]}
+  ];
+  const pipe=document.getElementById('pipe'),stage=document.getElementById('stage');
+  function show(i){
+    [...pipe.children].forEach((b,j)=>b.setAttribute('aria-selected',j===i));
+    const s=stages[i];
+    stage.innerHTML='<h3>'+(i+1)+'. '+s.t+'</h3><p>'+s.body+'</p><ul>'+s.screens.map(x=>'<li>'+x+'</li>').join('')+'</ul>';
+  }
+  stages.forEach((s,i)=>{const b=document.createElement('button');b.type='button';b.setAttribute('role','tab');b.innerHTML='<span class="n">STAGE '+(i+1)+'</span><span class="t">'+s.t+'</span><span class="d">'+s.d+'</span>';b.onclick=()=>show(i);pipe.appendChild(b)});
+  show(0);
+
+  // roster toggle
+  const pat=['DAY 08–17','DAY 08–17','DAY 08–17','DAY 08–17','DAY 08–17','OFF','OFF'];
+  const ros=[null,null,null,'LATE 14–22',null,'OT 08–12',null];
+  const tp=document.getElementById('t-pat'),tr=document.getElementById('t-ros'),row=document.getElementById('ros-row');
+  function week(on){
+    tp.setAttribute('aria-pressed',!on);tr.setAttribute('aria-pressed',on);row.hidden=!on;
+    for(let i=0;i<7;i++){const v=on&&ros[i]?ros[i]:pat[i];const cls=on&&ros[i]?'c-ros':(v==='OFF'?'c-off':'c-pat');document.getElementById('e'+(i+1)).innerHTML='<span class="chip '+cls+'">'+v+'</span>'}
+  }
+  tp.onclick=()=>week(false);tr.onclick=()=>week(true);week(false);
+
+  // simulator
+  const $=id=>document.getElementById(id);let authed=false;
+  function mins(v){const [h,m]=v.split(':').map(Number);return h*60+m}
+  function sim(){
+    let span=(mins($('s-out').value||'0:0')-mins($('s-in').value||'0:0'))/60; if(span<0)span+=24;
+    const n=Math.max(0,parseFloat($('s-norm').value)||0);
+    const norm=Math.min(span,n),ot=Math.max(0,span-n);
+    const hold=authed?0:ot,ok=authed?ot:0;
+    $('l-norm').textContent=norm.toFixed(2);$('l-hold').textContent=hold.toFixed(2);$('l-ok').textContent=ok.toFixed(2);
+    const tot=span||1;
+    $('s-bar').innerHTML='<div class="b-norm" style="flex-basis:'+(norm/tot*100)+'%">'+(norm?'Normal '+norm.toFixed(2):'')+'</div>'+(ot?'<div class="'+(authed?'b-ok':'b-hold')+'" style="flex-basis:'+(ot/tot*100)+'%">'+(authed?'Authorised ':'Holding ')+ot.toFixed(2)+'</div>':'');
+    $('s-auth').disabled=authed||!ot;$('s-auth').style.opacity=$('s-auth').disabled?.5:1;
+  }
+  ['s-in','s-out','s-norm'].forEach(id=>$(id).addEventListener('input',()=>{authed=false;sim()}));
+  $('s-auth').onclick=()=>{authed=true;sim()};$('s-reset').onclick=()=>{authed=false;sim()};
+  document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='a'&&document.activeElement&&document.activeElement.closest('.sim')&&document.activeElement.tagName!=='INPUT'){e.preventDefault();authed=true;sim()}});
+  sim();
+
+  // checklist
+  const tasks=[
+    ["Check clockings were collected","Open Global clockings. Empty? Check the Server Module."],
+    ["Make sure the Server Module is running","It collects clockings and processes hours in the background."],
+    ["Clear all errors","Work through the list until the stop sign turns green."],
+    ["Enter leave","Explain any absent days (no clockings) with the correct leave type."],
+    ["Authorise overtime","Only if authorisation is switched on. Unapproved hours aren't paid."],
+    ["Check the hours are correct","Browse Employee Payroll Hours. Skipping this risks over- or under-paying."],
+    ["Export to payroll","Run Export to Payroll once everything above is done."]
+  ];
+  const KEY='ecotime-guide-checks';let state=[];
+  try{state=JSON.parse(localStorage.getItem(KEY)||'[]')}catch(e){state=[]}
+  const ul=$('checklist');
+  tasks.forEach((t,i)=>{const li=document.createElement('li');li.innerHTML='<label for="ck'+i+'"><input type="checkbox" id="ck'+i+'"'+(state[i]?' checked':'')+'><span><b>'+t[0]+'</b><span class="w">'+t[1]+'</span></span></label>';ul.appendChild(li)});
+  function prog(){const c=tasks.map((_,i)=>$('ck'+i).checked);const n=c.filter(Boolean).length;$('p-fill').style.width=(n/tasks.length*100)+'%';$('p-count').textContent=n+' / '+tasks.length;const l=$('p-light');l.classList.toggle('go',c[2]);l.textContent=c[2]?'Errors cleared':'Errors outstanding';try{localStorage.setItem(KEY,JSON.stringify(c))}catch(e){}}
+  ul.addEventListener('change',prog);$('c-reset').onclick=()=>{tasks.forEach((_,i)=>$('ck'+i).checked=false);prog()};prog();
+
+  // glossary
+  const G=[
+    ["Clocking","One tap at a terminal: employee, time and direction (IN or OUT)."],
+    ["TNA","Time and attendance. The docs use it for the system and the hardware."],
+    ["Configuration Module","Where all setup happens: shifts, categories, features, clocks and leave types."],
+    ["Server Module","The background service that collects clockings and processes hours. If it stops, nothing comes in. Service names: EcoTimeServer, CSTimeServer or TNAServer."],
+    ["System Features","Switches that turn optional features on or off, including which classifications are active and overtime authorisation."],
+    ["Classification","A label for organising staff: Company, Branch, Department, Cost Centre, Category, Payscale, Type, Workgroup."],
+    ["Group Selection","A saved group of employees, used to filter screens, run reports and do bulk tasks."],
+    ["Shift Time Category","A bucket that hours are sorted into, such as Normal Time, Overtime or Holding."],
+    ["Shift Time Rates","The rates attached to time categories. Setup › Shifts › Shift Time Rates."],
+    ["Daily shift","The rules for one type of day: expected times and how hours become categories. One per day type."],
+    ["Payroll shift","A full pay period made from daily shifts: the employee's normal pattern. Every employee needs one."],
+    ["Payroll Shift Start Day","The weekday the payroll shift begins on."],
+    ["Daily Roster","A one-day override that puts an employee on a specific daily shift for that date, replacing the pattern."],
+    ["Calendar (roster)","A visual view of everyone's rosters over a chosen number of days."],
+    ["Shift rostering","Using daily rosters for people who work varying shifts without a fixed pattern."],
+    ["Holding category","Where overtime waits for approval. Its Requires Authorisation boxes stay unticked."],
+    ["Authorised category","Where approved overtime moves to. Requires Authorisation is ticked for Daily and/or Payroll."],
+    ["Daily Overtime Authorisations","A feature switch: overtime is approved day by day."],
+    ["Payroll Authorisations","A feature switch: overtime is approved once per pay period."],
+    ["Ctrl-A (authorise)","In the hours view, select a record and press Ctrl-A to move all holding time into authorised categories."],
+    ["Browse Daily Hours","The screen showing each day's calculated hours by category, and where daily overtime is approved."],
+    ["Browse Employee Payroll Hours","The screen showing period totals. Check it before exporting."],
+    ["Global clockings","The screen listing all collected clockings."],
+    ["Bulk Tasks","Menus for doing one change to many employees, such as adding, swapping or removing rosters or adding overtime authorisations."],
+    ["Edit Clocks","Where clocking terminals are registered and managed."],
+    ["Export to Payroll","Sends payroll hours to your payroll system in the format it needs."],
+    ["Leave Option","The screen for booking leave: Insert opens Update Leave, then pick a type and From/To dates."],
+    ["Absent","No clockings on a day the employee was expected to work."],
+    ["Eco Time Web","The browser interface. Supervisors can roster staff and manage their team there."],
+    ["Eco Mobile App","The phone app. Employees can submit leave requests."]
+  ];
+  const dl=$('gloss');
+  function render(q){q=(q||'').trim().toLowerCase();const m=G.filter(g=>!q||g[0].toLowerCase().includes(q)||g[1].toLowerCase().includes(q));dl.innerHTML=m.length?m.map(g=>'<div><dt>'+g[0]+'</dt><dd>'+g[1]+'</dd></div>').join(''):'<p class="empty">No term matches "'+q.replace(/[<>&"]/g,'')+'". Try a shorter word.</p>'}
+  $('g-q').addEventListener('input',e=>render(e.target.value));render('');
+
+  // support desk troubleshooter: [title, causeText, docOrTip]
+  const D='doc',T='tip';
+  const S=[
+    {k:"Hours",s:"Hours are wrong",said:"“They worked 8 hours but Ecotime shows 6.” or “Way too many hours.”",
+     c:[["Missing or duplicate clocking","Look at the day's clockings first. A forgotten clock-out means hours aren't calculated at all, and a double tap flips every direction after it. <b>Fix:</b> add the missing OUT or delete the duplicate, then Process.",D],
+        ["Wrong shift applied that day","The expected shift decides how hours are sorted. Check the Daily Roster for a roster entry, then the employee's payroll shift. <b>Fix:</b> right-click the day in Daily Roster and pick the right shift.",D],
+        ["Overtime sitting in holding","If overtime authorisation is on, extra hours wait in the holding category and don't show as paid. <b>Fix:</b> authorise in Browse Daily Hours (Ctrl-A).",D],
+        ["Break taken wrongly","Either a break clocking is missing, or the automatic deduction is being applied. See Breaks & clockings.",T],
+        ["Not recalculated after a change","Someone fixed a clocking or shift, but the hours were never rebuilt. <b>Fix:</b> press Process, or use Reprocess Hours for the date range.",D]],
+     esc:"Hours are wrong for <b>everyone</b> on the same shift after you've confirmed the clockings are fine. That points to the shift rules themselves, so pass it to the consultant who set the system up."},
+    {k:"Breaks",s:"Break wrong or not deducted",said:"“It's taken an hour for lunch but I only had 30 minutes.” or “My break wasn't taken off.”",
+     c:[["Does the site clock for breaks?","Ask first. If staff clock out and in for lunch, the problem is almost always a missing or same-direction break clocking.",T],
+        ["Missing break clocking","The sequence comes out as IN, OUT, OUT or similar, which gives a same-direction error. <b>Fix:</b> add the missing clocking with the right direction, or change the direction with Ctrl-A or F2 in the clockings list.",D],
+        ["Automatic deduction applied twice","If someone clocks their break <i>and</i> the shift also deducts a fixed break, they lose it twice. Ask how the shift handles breaks.",T],
+        ["Wrong shift = wrong break rule","Different shifts can have different break rules. Check which shift was used that day.",T],
+        ["Macro script deduction","Some sites deduct breaks with a macro (the docs give an AddClocking example). That is set up by the consultant.",D]],
+     esc:"The break rule itself seems wrong, or it's a macro script. Don't edit macros yourself. Escalate with the employee, the date and the clockings."},
+    {k:"Errors",s:"Error showing (red stop sign)",said:"“There's a red sign and I can't run payroll.”",
+     c:[["Missing clock-out","This is the most common one. Highlight the error, click Fix and add the OUT clocking. Hours only calculate once an OUT exists.",D],
+        ["Missing daily hours","This usually follows a missing clock-out. Fix that first and this one normally clears.",D],
+        ["Two clockings in the same direction","IN then IN, or OUT then OUT. Change the direction or delete the wrong one in the clockings list.",D],
+        ["Invalid shift code","The employee isn't on a valid payroll shift. <b>Fix:</b> assign it in the Payroll Shifts option from Browse Employees, or from Jump-Start.",D],
+        ["Clocked out after the shift ended","They were rostered on a day shift but worked nights. <b>Fix:</b> change that day's shift to a night shift.",D]],
+     esc:"An error you don't recognise, or one that comes back straight after you clear it."},
+    {k:"Errors",s:"Fixed it, but still wrong",said:"“I added the clocking but the hours haven't changed.”",
+     c:[["Not processed yet","Press Process on the clocking to force a rebuild. Edits made in the employee view usually show in the daily hours after a few seconds.",D],
+        ["Server Module busy or stopped","Reprocess Hours queues work on the Server Module. If it's stopped, nothing gets recalculated. Check the service.",D],
+        ["Other errors still open","Hours don't calculate correctly while any error remains on that employee's record. Clear them all.",D],
+        ["Fixed the wrong date","Night shifts and late clock-outs can sit on the day before or after. Check the dates next to the one you fixed.",T]],
+     esc:"The hours stay unchanged after a successful reprocess, with no errors and the Server Module running."},
+    {k:"Shifts",s:"Night shift split / wrong day",said:"“Their night shift is showing as two days.” or “Clocked out after shift error.”",
+     c:[["On a day shift, but worked nights","Ecotime treats the morning clock-out as belonging to the wrong shift. <b>Fix:</b> roster the night shift for that date.",D],
+        ["Roster missing for the night","The employee's pattern is days, and nobody rostered the nights. Add a roster entry for each night, or import a roster.",D],
+        ["Roster import set the time to 0:00","In imports, 0:00 means midnight. A badly formatted file can put shifts on the wrong boundary.",D]],
+     esc:"Every night-shift worker is affected. That's a shift setup issue."},
+    {k:"Shifts",s:"Wrong shift being used",said:"“He's showing on earlies but he's on lates this week.”",
+     c:[["Roster not entered","Without a roster entry, Ecotime uses the payroll shift pattern. <b>Fix:</b> add the roster in Daily Roster, by Bulk Tasks or on the web.",D],
+        ["Roster import wiped it","An import with fewer than 7 days removes existing rosters, and a later import replaces earlier ones. Ask whether anyone imported recently.",D],
+        ["Payroll shift changed or wrong start day","Check the employee's payroll shift for that period, and the Payroll Shift Start Day.",D]],
+     esc:"The rosters look right, but the wrong shift is still being applied after a reprocess."},
+    {k:"Clockings",s:"No clockings coming in",said:"“Nobody's clockings are showing today.”",
+     c:[["Server Module not running","This is the usual cause. On the server, start the EcoTimeServer, CSTimeServer or TNAServer service.",D],
+        ["Clock offline","If the service is running but nothing arrives, the terminal may be disconnected. Check it with Edit Clocks or Managing Devices.",D],
+        ["Only one person missing","Check their card is still assigned to them, and that they're actually clocking.",T]],
+     esc:"The service is running, the clock is online, and still no clockings arrive. Escalate as a hardware or comms issue."},
+    {k:"Overtime",s:"Overtime missing / not paid",said:"“They stayed two hours late and it's not on payroll.”",
+     c:[["Waiting for authorisation","With authorisation switched on, overtime isn't paid until it's approved. Look in the holding category.",D],
+        ["Authorised in the wrong place","Daily and Payroll authorisation are separate switches. Check which one the site uses.",D],
+        ["Shift doesn't allow overtime","The daily shift's rules decide when time becomes overtime. A shift with no overtime rule leaves the extra time unpaid.",T],
+        ["Exported before approval","If payroll was exported first, the overtime missed that run.",T]],
+     esc:"The overtime was authorised but still didn't export."},
+    {k:"Leave",s:"Shows absent but was in",said:"“She was here all day but she's marked absent.”",
+     c:[["No clockings recorded","Absent just means no clockings. Did they forget to clock, or use a different terminal? Add the clockings if a manager confirms the hours.",D],
+        ["Clocked on an Info or Access clock","Only Pay Clockings count towards hours. Check how the clocking is flagged.",D],
+        ["Should be leave","If they really were off, book leave on the Leave Option screen so the day is explained.",D]],
+     esc:"The clockings exist and are flagged as pay clockings, but the day still shows absent."}
+  ];
+  const sym=$('symptoms'),diag=$('diag');
+  function showS(i){
+    [...sym.children].forEach((b,j)=>b.setAttribute('aria-selected',j===i));
+    const x=S[i];
+    diag.innerHTML='<p class="said">'+x.said+'</p><div><h4>Likely causes, most common first</h4><ol class="causes">'+x.c.map((c,j)=>'<li><div class="ch"><span class="rank">#'+(j+1)+'</span><span class="ct">'+c[0]+'</span><span class="tag '+c[2]+'">'+(c[2]===D?'From docs':'Support tip')+'</span></div><p>'+c[1]+'</p></li>').join('')+'</ol></div><div class="escalate"><b>Escalate when:</b> '+x.esc+'</div>';
+  }
+  S.forEach((x,i)=>{const b=document.createElement('button');b.type='button';b.setAttribute('role','tab');b.innerHTML='<small>'+x.k+'</small>'+x.s;b.onclick=()=>showS(i);sym.appendChild(b)});
+  showS(0);
+  $('copy-ticket').onclick=function(){const btn=this,txt=$('ticket').textContent;
+    const sel=()=>{const r=document.createRange();r.selectNodeContents($('ticket'));const s=getSelection();s.removeAllRanges();s.addRange(r);btn.textContent='Selected, press Ctrl+C'};
+    try{navigator.clipboard.writeText(txt).then(()=>{btn.textContent='Copied';setTimeout(()=>btn.textContent='Copy',1500)},sel)}catch(e){sel()}};
+
+  // active nav
+  const links=[...document.querySelectorAll('nav.rail a')];
+  const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){links.forEach(a=>a.classList.toggle('on',a.getAttribute('href')==='#'+e.target.id))}})},{rootMargin:'-20% 0px -70% 0px'});
+  document.querySelectorAll('main section').forEach(s=>io.observe(s));
+})();
+</script>
+
+</body>
+</html>
