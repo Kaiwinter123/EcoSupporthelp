@@ -27,6 +27,7 @@
   --code-bg:#1f2a35; color-scheme:dark }
 
 *{box-sizing:border-box}
+[hidden]{display:none!important}
 body{background:var(--bg);color:var(--ink);font:16px/1.6 var(--f-body);margin:0}
 a{color:var(--accent)}
 :focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:3px}
@@ -195,6 +196,40 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .flash{animation:flash 2s ease-out}
 @keyframes flash{0%,30%{background:var(--accent-soft);box-shadow:0 0 0 4px var(--accent-soft)}100%{background:transparent;box-shadow:0 0 0 4px transparent}}
 @media (prefers-reduced-motion:reduce){.flash{animation:none;outline:2px solid var(--accent)}}
+
+/* assistant */
+.ask-fab{position:fixed;right:max(16px,env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:50;display:flex;align-items:center;gap:8px;border:0;border-radius:999px;padding:12px 18px;background:var(--ink);color:var(--bg);font:600 .95rem var(--f-body);cursor:pointer;box-shadow:0 10px 30px -10px rgba(0,0,0,.5)}
+.ask-fab:hover{background:var(--accent);color:#fff}
+.chat{position:fixed;right:max(16px,env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:60;width:min(420px,calc(100vw - 32px));height:min(620px,calc(100vh - 32px - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px)));display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:0 24px 60px -20px rgba(0,0,0,.55);overflow:hidden}
+.chat-head{display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid var(--line)}
+.chat-head .who{flex:1;min-width:0;display:grid;gap:1px}
+.chat-head .who b{font:700 1rem var(--f-display)}
+.chat-head .mode{font:500 .7rem var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.chat-head .mode.ai{color:var(--ok)}
+.icon-btn{border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:8px;width:34px;height:34px;display:grid;place-items:center;cursor:pointer;font:600 1rem var(--f-body)}
+.chat-log{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:12px}
+.msg{max-width:92%;padding:10px 13px;border-radius:12px;font-size:.93rem;line-height:1.5;overflow-wrap:anywhere}
+.msg.me{align-self:flex-end;background:var(--ink);color:var(--bg);border-bottom-right-radius:4px}
+.msg.bot{align-self:flex-start;background:var(--bg);border:1px solid var(--line);border-bottom-left-radius:4px}
+.msg.bot p{margin:0 0 8px}.msg.bot p:last-child{margin:0}
+.msg.bot ul,.msg.bot ol{margin:0 0 8px;padding-left:20px;display:grid;gap:3px}
+.msg.bot code{font:500 .85em var(--f-mono);background:var(--code-bg);padding:1px 5px;border-radius:4px}
+.msg .thinking{color:var(--muted);font-style:italic}
+.msg .note{margin-top:6px}
+.related{display:grid;gap:6px;margin-top:8px}
+.related button{all:unset;cursor:pointer;display:grid;gap:2px;border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:8px 10px}
+.related button:hover,.related button:focus-visible{border-color:var(--accent)}
+.related .rt{font-weight:600;font-size:.88rem}
+.related .rw{font-size:.76rem;color:var(--muted)}
+.chat-chips{display:flex;flex-wrap:wrap;gap:6px}
+.chat-chips button{font:500 .82rem var(--f-body);border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:6px 11px;cursor:pointer;text-align:left}
+.chat-chips button:hover{border-color:var(--accent)}
+.chat-form{display:flex;gap:8px;padding:10px;border-top:1px solid var(--line);align-items:flex-end}
+#chat-in{flex:1;min-width:0;resize:none;border:1.5px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);font:1rem/1.4 var(--f-body);padding:9px 11px;max-height:120px}
+#chat-in:focus{outline:none;border-color:var(--accent)}
+.chat-form .btn{padding:10px 14px}
+.chat-foot{font-size:.72rem;color:var(--muted);padding:0 12px 10px}
+@media (max-width:560px){.chat{right:0;left:0;bottom:0;width:100%;height:calc(100% - env(safe-area-inset-top,0px));border-radius:14px 14px 0 0;padding-bottom:env(safe-area-inset-bottom,0px)}}
 
 /* support desk */
 .desk{display:grid;grid-template-columns:260px minmax(0,1fr);border:1px solid var(--line);border-radius:12px;background:var(--surface);overflow:hidden}
@@ -593,6 +628,24 @@ Escalated to:</pre>
 </div>
 <footer><div class="wrap">An unofficial learning aid. Not affiliated with Eco Time or Clocking Systems.</div></footer>
 
+<button type="button" class="ask-fab" id="ask-open" aria-controls="chat" aria-expanded="false">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"></path></svg>
+  Ask the guide
+</button>
+<div class="chat" id="chat" role="dialog" aria-label="Ecotime help assistant" hidden>
+  <div class="chat-head">
+    <div class="who"><b>Ecotime helper</b><span class="mode" id="chat-mode">Checking…</span></div>
+    <button type="button" class="icon-btn" id="chat-clear" title="New conversation" aria-label="New conversation">↺</button>
+    <button type="button" class="icon-btn" id="chat-close" title="Close" aria-label="Close">✕</button>
+  </div>
+  <div class="chat-log" id="chat-log" aria-live="polite"></div>
+  <form class="chat-form" id="chat-form">
+    <textarea id="chat-in" rows="1" placeholder="Ask about an issue, e.g. “why is lunch taken twice?”" aria-label="Your question"></textarea>
+    <button type="submit" class="btn" id="chat-send">Ask</button>
+  </form>
+  <div class="chat-foot" id="chat-foot"></div>
+</div>
+
 <script>
 (function(){
   const stages=[
@@ -860,6 +913,100 @@ Escalated to:</pre>
   box.addEventListener('click',e=>{const c=e.target.closest('[data-s]');if(c){q.value=c.dataset.s;draw();q.focus();return}const li=e.target.closest('li[data-i]');if(li)pick(+li.dataset.i)});
   q.addEventListener('blur',()=>setTimeout(close,120));
   document.addEventListener('keydown',e=>{if(e.key==='/'&&!/^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName)){e.preventDefault();q.focus()}});
+
+  // ---------- assistant ----------
+  (function(){
+    const chat=$('chat'),log=$('chat-log'),form=$('chat-form'),inp=$('chat-in'),send=$('chat-send'),modeEl=$('chat-mode'),foot=$('chat-foot'),fab=$('ask-open');
+    let ai=null,aiChecked=false,turns=[],ctl=null,busy=false;
+    const STARTERS=['Break is being deducted twice','Night shift shows as two days','How do I authorise overtime?','Hours not updating after a fix','No clockings coming in'];
+    // the guide's own text, given to Claude as its only source
+    function knowledge(){
+      const c=document.querySelector('main').cloneNode(true);
+      c.querySelectorAll('#diag,#gloss,#stage,.desk,#sources ul,script').forEach(n=>n.remove());
+      const page=c.textContent.replace(/[ \t]+/g,' ').replace(/\n\s*\n+/g,'\n').trim();
+      const ts=S.map(x=>'PROBLEM: '+x.s+'\nCaller says: '+strip(x.said)+'\n'+x.c.map((c,j)=>'  Cause '+(j+1)+' ['+(c[2]===D?'From docs':'Support tip')+']: '+c[0]+' — '+strip(c[1])).join('\n')+'\n  Escalate when: '+strip(x.esc)).join('\n\n');
+      const gl=G.map(g=>g[0]+': '+g[1]).join('\n');
+      const st=stages.map((s,i)=>(i+1)+'. '+s.t+': '+strip(s.body)+' Screens: '+strip(s.screens.join('; '))).join('\n');
+      return 'HOW A CLOCKING BECOMES PAY\n'+st+'\n\nSUPPORT DESK TROUBLESHOOTER\n'+ts+'\n\nREST OF THE GUIDE\n'+page+'\n\nGLOSSARY\n'+gl;
+    }
+    let KB=null;
+    const RULES=()=>'You are the help assistant built into the "Ecotime Field Guide" web page, a guide to supporting Ecotime time and attendance software. The person asking is usually a support agent helping a customer, or someone learning Ecotime.\n\nRules:\n- Answer ONLY from the GUIDE CONTENT below. Never invent menu names, field labels, settings or features that are not in it.\n- If the guide does not cover the question, say so in one sentence, then suggest what to check or that it should be escalated to the customer\'s Ecotime consultant/supplier.\n- Start with a one-line direct answer. Then give numbered steps if there is a procedure, or the likely causes most common first if it is a problem.\n- Things tagged [Support tip] are general practice, not official docs: say "(general tip)" when you use one.\n- End with "See: <section name>" naming where in the guide to look.\n- Keep it short (under about 180 words). Plain text with **bold** and simple "-" or "1." lists only; no headings, tables or links.\n\nGUIDE CONTENT:\n'+(KB||(KB=knowledge()));
+    function md(t){
+      const lines=esc(t).replace(/\*\*(.+?)\*\*/g,'<b>$1</b>').replace(/`([^`]+)`/g,'<code>$1</code>').split('\n');
+      let out='',list=null;
+      const end=()=>{if(list){out+='</'+list+'>';list=null}};
+      lines.forEach(l=>{const ul=l.match(/^\s*[-•*]\s+(.*)/),ol=l.match(/^\s*\d+[.)]\s+(.*)/);
+        if(ul){if(list!=='ul'){end();out+='<ul>';list='ul'}out+='<li>'+ul[1]+'</li>'}
+        else if(ol){if(list!=='ol'){end();out+='<ol>';list='ol'}out+='<li>'+ol[1]+'</li>'}
+        else{end();if(l.trim())out+='<p>'+l+'</p>'}});
+      end();return out;
+    }
+    function bubble(cls,html){const d=document.createElement('div');d.className='msg '+cls;d.innerHTML=html;log.appendChild(d);log.scrollTop=log.scrollHeight;return d}
+    function related(q,n){
+      const hits=search(q).hits.slice(0,n);if(!hits.length)return null;
+      const wrap=document.createElement('div');wrap.className='related';
+      hits.forEach(h=>{const b=document.createElement('button');b.type='button';b.innerHTML='<span class="rw">'+esc(h.e.type+' · '+h.e.where)+'</span><span class="rt">'+esc(h.e.title)+'</span>';b.onclick=()=>{if(matchMedia('(max-width:560px)').matches)closeChat();h.e.go()};wrap.appendChild(b)});
+      return wrap;
+    }
+    function greet(){
+      log.innerHTML='';
+      const g=bubble('bot',ai?'<p>Hi! Ask me about an Ecotime issue or how to do something. I answer from this guide, and I\'ll tell you when it doesn\'t cover something.</p>':'<p>Hi! Ask me about an Ecotime issue and I\'ll point you to the right part of this guide.</p>');
+      const chips=document.createElement('div');chips.className='chat-chips';
+      STARTERS.forEach(s=>{const b=document.createElement('button');b.type='button';b.textContent=s;b.onclick=()=>{inp.value=s;ask()};chips.appendChild(b)});
+      g.appendChild(chips);
+    }
+    function setMode(){
+      modeEl.textContent=ai?'AI answers · from this guide':'Guide search';modeEl.classList.toggle('ai',!!ai);
+      foot.textContent=ai?'Uses Claude on your own account. Answers can be wrong, so check the steps against the guide.':'AI answers are available when this page is opened on claude.ai. Here, answers come from searching the guide.';
+    }
+    async function detect(){
+      if(aiChecked)return;aiChecked=true;
+      try{ai=(window.claude&&typeof window.claude.use==='function')?await window.claude.use('sample'):null}catch(e){ai=null}
+      setMode();if(!turns.length)greet();
+    }
+    function offline(q){
+      const hits=search(q).hits;
+      if(!hits.length){bubble('bot','<p>I couldn\'t find that in the guide. Try different words, like <b>break</b>, <b>overtime</b>, <b>night shift</b> or <b>missing clocking</b>. If it\'s not covered, escalate to the customer\'s Ecotime consultant.</p>');return}
+      const top=hits[0].e;
+      const b=bubble('bot','<p><b>'+esc(top.title)+'</b> <span class="rw" style="color:var(--muted);font-size:.8rem">('+esc(top.where)+')</span></p><p>'+esc(top.text.length>420?top.text.slice(0,420)+'…':top.text)+'</p><p class="note" style="color:var(--muted);font-size:.85rem">Open it, or see related items:</p>');
+      const r=related(q,4);if(r)b.appendChild(r);
+    }
+    const ERR={not_granted:'AI answers are switched off for this page, so I\'ll search the guide instead.',sampling_disabled:'AI answers aren\'t available on this account, so I\'ll search the guide instead.',rate_limited:'Too many questions in a short time. Wait a minute and try again.',session_expired:'Your Claude sign-in has expired. Sign in again to use AI answers.',refused:'I can\'t answer that one. Try rephrasing it as an Ecotime question.',prompt_too_large:'That conversation got too long. Start a new one with ↺.'};
+    async function ask(){
+      const q=inp.value.trim();if(!q||busy)return;
+      inp.value='';inp.style.height='';bubble('me',esc(q));
+      if(!ai){offline(q);return}
+      busy=true;send.textContent='Stop';
+      turns.push({role:'user',content:q});
+      if(turns.length>10)turns=turns.slice(-10);
+      while(turns[0]&&turns[0].role!=='user')turns.shift();
+      const b=bubble('bot','<span class="thinking">Thinking…</span>');
+      ctl=new AbortController();
+      try{
+        const {text,truncated}=await ai([{role:'user',content:RULES()},...turns],{cache:false,modelTier:'quick',signal:ctl.signal,onText:({text})=>{b.innerHTML=md(text);log.scrollTop=log.scrollHeight}});
+        b.innerHTML=md(text)+(truncated?'<p class="note" style="color:var(--muted)">(Answer cut short. Ask for less at once.)</p>':'');
+        turns.push({role:'assistant',content:text});
+        const r=related(q,2);if(r)b.appendChild(r);
+      }catch(e){
+        turns.pop();
+        const code=e&&e.code;
+        if(code==='cancelled'){b.innerHTML=e.text?md(e.text)+'<p class="note" style="color:var(--muted)">(Stopped.)</p>':'<span class="thinking">Stopped.</span>'}
+        else if(code==='not_granted'||code==='sampling_disabled'||code==='not_declared'||code==='capability_disabled'||code==='capability_removed'){ai=null;setMode();b.innerHTML='<p>'+(ERR[code]||ERR.not_granted)+'</p>';offline(q)}
+        else{b.innerHTML=(e&&e.text&&code!=='refused'?md(e.text):'')+'<p>'+(ERR[code]||'Something went wrong getting an answer. Try again in a moment.')+'</p>';}
+      }finally{busy=false;ctl=null;send.textContent='Ask';log.scrollTop=log.scrollHeight}
+    }
+    function openChat(){chat.hidden=false;fab.hidden=true;fab.setAttribute('aria-expanded','true');detect();if(!log.children.length)greet();setTimeout(()=>inp.focus(),30)}
+    function closeChat(){chat.hidden=true;fab.hidden=false;fab.setAttribute('aria-expanded','false');fab.focus()}
+    fab.onclick=openChat;$('chat-close').onclick=closeChat;
+    $('chat-clear').onclick=()=>{if(ctl)ctl.abort();turns=[];greet();inp.focus()};
+    form.addEventListener('submit',e=>{e.preventDefault();if(busy&&ctl){ctl.abort();return}ask()});
+    inp.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();if(!busy)ask()}});
+    inp.addEventListener('input',()=>{inp.style.height='';inp.style.height=Math.min(inp.scrollHeight,120)+'px'});
+    chat.addEventListener('keydown',e=>{if(e.key==='Escape')closeChat()});
+    setMode();modeEl.textContent='Checking…';
+    // start detection early so the mode is known when opened
+    setTimeout(detect,0);
+  })();
 
   // active nav
   const links=[...document.querySelectorAll('nav.rail a')];
