@@ -49,7 +49,7 @@ h1{font-size:clamp(2.2rem,5vw,3.4rem);font-weight:800;letter-spacing:-.02em}
 .punch b{color:var(--ink);font-weight:500}
 
 /* nav */
-nav.rail{position:sticky;top:calc(env(safe-area-inset-top,0px) + 20px);align-self:start;display:grid;gap:2px}
+nav.rail{position:sticky;top:calc(env(safe-area-inset-top,0px) + 88px);align-self:start;display:grid;gap:2px}
 nav.rail a{display:block;padding:7px 10px;border-radius:6px;color:var(--muted);text-decoration:none;font-size:.93rem}
 nav.rail a:hover{background:var(--surface);color:var(--ink)}
 nav.rail a.on{background:var(--surface);color:var(--ink);box-shadow:inset 3px 0 0 var(--accent)}
@@ -62,7 +62,7 @@ nav.rail .lbl{font:500 .7rem/1 var(--f-mono);letter-spacing:.12em;text-transform
 }
 
 main{display:grid;gap:72px;min-width:0}
-section{display:grid;gap:20px;scroll-margin-top:24px}
+section{display:grid;gap:20px;scroll-margin-top:96px}
 .prose{display:grid;gap:14px;max-width:68ch}
 .sub{color:var(--muted)}
 
@@ -163,6 +163,39 @@ tr:last-child td{border-bottom:0}
 .gloss dd{margin:0;color:var(--muted);font-size:.9rem}
 .empty{padding:16px;color:var(--muted)}
 
+/* site search */
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:31;background:var(--surface)}
+.searchbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;background:var(--surface);border-bottom:1px solid var(--line);box-shadow:0 6px 18px -14px rgba(0,0,0,.35)}
+.searchbar .wrap{padding-block:12px}
+.sb-inner{position:relative;max-width:720px}
+.sb-field{display:flex;align-items:center;gap:10px;border:1.5px solid var(--line);border-radius:10px;background:var(--bg);padding:0 12px}
+.sb-field:focus-within{border-color:var(--accent)}
+.sb-field svg{flex:none;color:var(--muted)}
+#site-q{flex:1;min-width:0;border:0;background:transparent;color:var(--ink);font:500 1rem var(--f-body);padding:12px 0;outline:none}
+#site-q::-webkit-search-cancel-button{cursor:pointer}
+.sb-key{font:500 .75rem var(--f-mono);color:var(--muted);border:1px solid var(--line);border-radius:4px;padding:1px 6px}
+@media (max-width:560px){.sb-key{display:none}}
+.sb-results{position:absolute;left:0;right:0;top:calc(100% + 6px);background:var(--surface);border:1px solid var(--line);border-radius:10px;box-shadow:0 18px 40px -18px rgba(0,0,0,.45);max-height:min(65vh,520px);overflow-y:auto;z-index:40}
+.sb-head{padding:10px 14px 6px;font:500 .7rem/1 var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.sb-chips{display:flex;flex-wrap:wrap;gap:6px;padding:4px 14px 14px}
+.sb-chips button{font:500 .85rem var(--f-body);border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:999px;padding:6px 12px;cursor:pointer}
+.sb-chips button:hover{border-color:var(--accent)}
+.sb-list{list-style:none;margin:0;padding:0 0 6px}
+.sb-list li{padding:10px 14px;cursor:pointer;display:grid;gap:3px;border-top:1px solid var(--line)}
+.sb-list li[aria-selected="true"],.sb-list li:hover{background:var(--accent-soft)}
+.sb-meta{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.sb-type{font:500 .68rem/1 var(--f-mono);letter-spacing:.06em;text-transform:uppercase;padding:4px 6px;border-radius:4px;background:var(--code-bg);color:var(--muted);white-space:nowrap}
+.sb-type.t-fix{background:var(--err-soft);color:var(--err)}
+.sb-type.t-term{background:var(--ok-soft);color:var(--ok)}
+.sb-where{font-size:.78rem;color:var(--muted)}
+.sb-title{font-weight:600}
+.sb-snip{font-size:.86rem;color:var(--muted);line-height:1.45}
+.sb-list mark,.sb-snip mark{background:var(--hold-soft);color:var(--ink);border-radius:2px;padding:0 1px}
+.sb-none{padding:14px;color:var(--muted);font-size:.92rem}
+.flash{animation:flash 2s ease-out}
+@keyframes flash{0%,30%{background:var(--accent-soft);box-shadow:0 0 0 4px var(--accent-soft)}100%{background:transparent;box-shadow:0 0 0 4px transparent}}
+@media (prefers-reduced-motion:reduce){.flash{animation:none;outline:2px solid var(--accent)}}
+
 /* support desk */
 .desk{display:grid;grid-template-columns:260px minmax(0,1fr);border:1px solid var(--line);border-radius:12px;background:var(--surface);overflow:hidden}
 @media (max-width:760px){.desk{grid-template-columns:minmax(0,1fr)}}
@@ -214,6 +247,19 @@ html{scroll-behavior:smooth}
     </div>
   </div>
 </header>
+
+<div class="searchbar" role="search">
+  <div class="wrap">
+    <div class="sb-inner">
+      <label for="site-q" class="sb-field">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
+        <input id="site-q" type="search" placeholder="Search issues or topics, e.g. “break not deducted”, “night shift”, “reprocess”" autocomplete="off" aria-label="Search the guide" aria-controls="sb-results" aria-expanded="false">
+        <span class="sb-key" aria-hidden="true">/</span>
+      </label>
+      <div class="sb-results" id="sb-results" hidden></div>
+    </div>
+  </div>
+</div>
 
 <div class="wrap layout">
   <nav class="rail" aria-label="Chapters">
@@ -716,6 +762,104 @@ Escalated to:</pre>
   $('copy-ticket').onclick=function(){const btn=this,txt=$('ticket').textContent;
     const sel=()=>{const r=document.createRange();r.selectNodeContents($('ticket'));const s=getSelection();s.removeAllRanges();s.addRange(r);btn.textContent='Selected, press Ctrl+C'};
     try{navigator.clipboard.writeText(txt).then(()=>{btn.textContent='Copied';setTimeout(()=>btn.textContent='Copy',1500)},sel)}catch(e){sel()}};
+
+  // ---------- site search ----------
+  const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  const strip=h=>{const d=document.createElement('div');d.innerHTML=h;return d.textContent};
+  function flash(el){if(!el)return;el.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'center'});el.classList.remove('flash');void el.offsetWidth;el.classList.add('flash');setTimeout(()=>el.classList.remove('flash'),2100)}
+  const IDX=[];
+  // troubleshooter symptoms and their causes
+  S.forEach((x,i)=>{
+    IDX.push({type:'Troubleshooter',cls:'t-fix',where:'Support desk',title:x.s,text:strip(x.said+' '+x.c.map(c=>c[0]).join('. ')+'. '+x.esc),go:()=>{showS(i);flash(document.querySelector('.desk'))}});
+    x.c.forEach((c,j)=>IDX.push({type:'Cause & fix',cls:'t-fix',where:x.s,title:c[0],text:strip(c[1]),go:()=>{showS(i);flash(document.querySelector('#diag .causes li:nth-child('+(j+1)+')'))}}));
+  });
+  // glossary
+  G.forEach(g=>IDX.push({type:'Glossary',cls:'t-term',where:'Glossary',title:g[0],text:g[1],go:()=>{$('g-q').value=g[0];render(g[0]);flash(document.querySelector('#gloss div'))}}));
+  // pipeline stages
+  stages.forEach((s,i)=>IDX.push({type:'Overview',where:'The big picture',title:s.t+': '+s.d,text:strip(s.body+' '+s.screens.join('. ')),go:()=>{show(i);flash($('stage'))}}));
+  // static page content
+  const secName=el=>{const s=el.closest('section');const h=s&&s.querySelector('h2');return h?h.textContent:''};
+  document.querySelectorAll('main ol.steps>li, main .check li, main table tbody tr, main .panel, main .opt, main .flag, main section>.prose').forEach(el=>{
+    if(el.closest('#diag,#gloss,#stage,.desk'))return;
+    let title,text;
+    if(el.matches('tr')){const td=el.querySelectorAll('td');title=td[0].textContent;text=[...td].slice(1).map(t=>t.textContent).join(' — ')}
+    else if(el.matches('.check li')){title=el.querySelector('b').textContent;text=el.querySelector('.w').textContent}
+    else if(el.matches('.flag')){const b=el.querySelector('b');title=b?b.textContent.replace(/:$/,''):secName(el);text=el.textContent}
+    else {const h=el.querySelector('h3,h4');title=h?h.textContent:secName(el);text=el.textContent.replace(title,'')}
+    IDX.push({type:'Guide',where:secName(el),title:title.trim(),text:text.replace(/\s+/g,' ').trim(),go:()=>flash(el)});
+  });
+  IDX.forEach(e=>{e.t=e.title.toLowerCase();e.x=(e.text+' '+e.where).toLowerCase()});
+
+  // everyday words → the terms Ecotime uses
+  const SYN=[
+    ['break','breaks','lunch','meal','dinner','tea'],
+    ['overtime','ot','extra','late','stayed'],
+    ['leave','holiday','holidays','sick','absence','absent','annual','vacation'],
+    ['clocking','clockings','clock','clocked','punch','tap','swipe','card','terminal','machine'],
+    ['night','nights','midnight','overnight','nightshift'],
+    ['shift','shifts','rota','roster','rostered','rosters','pattern'],
+    ['error','errors','red','stop','sign','warning'],
+    ['reprocess','recalculate','recalc','process','refresh','rebuild','update'],
+    ['export','payroll','sage','payspace','pay','paid'],
+    ['hours','hour','time','times'],
+    ['missing','forgot','forgotten','missed'],
+    ['wrong','incorrect','bad'],
+    ['authorise','authorize','authorisation','authorization','approve','approval','holding'],
+    ['import','imported','spreadsheet','csv','file'],
+    ['direction','twice','double','duplicate','same'],
+    ['employee','staff','worker','person','people'],
+    ['server','service','module']
+  ];
+  const STOP=new Set(['how','do','i','to','the','a','an','is','my','for','of','on','it','and','or','what','why','when','can','does','with','in','not','no','at','me','get','got','up','be','are','was','has','have','been','their','they','he','she','his','her','this','that','showing','shows']);
+  const synOf=w=>{for(const g of SYN)if(g.includes(w))return g;return [w]};
+  function search(q){
+    const words=q.toLowerCase().replace(/[^a-z0-9\s-]/g,' ').split(/\s+/).filter(w=>w&&!STOP.has(w));
+    if(!words.length)return {words:[],hits:[]};
+    const groups=words.map(w=>[...new Set([w,...synOf(w)])]);
+    const hits=[];
+    IDX.forEach(e=>{
+      let score=0,matched=0;
+      groups.forEach((g,gi)=>{
+        let best=0;
+        g.forEach(v=>{const exact=v===words[gi];const re=new RegExp('\\b'+v.replace(/[-]/g,'\\-'));
+          if(re.test(e.t))best=Math.max(best,exact?6:4);else if(re.test(e.x))best=Math.max(best,exact?2:1.2);
+          else if(v.length>3&&(e.t.includes(v)||e.x.includes(v)))best=Math.max(best,.6)});
+        if(best){matched++;score+=best}
+      });
+      const need=groups.length<=2?groups.length:Math.ceil(groups.length*.6);
+      if(matched>=need){if(e.type==='Troubleshooter')score+=1.5;if(e.type==='Cause & fix')score+=.5;hits.push({e,score:score+matched})}
+    });
+    hits.sort((a,b)=>b.score-a.score);
+    return {words:groups.flat(),hits:hits.slice(0,10)};
+  }
+  function hl(s,terms){let out=esc(s);terms.filter(t=>t.length>1).sort((a,b)=>b.length-a.length).forEach(t=>{out=out.replace(new RegExp('\\b('+t.replace(/[-]/g,'\\-')+'\\w*)(?![^<]*>)','gi'),'<mark>$1</mark>')});return out}
+  function snip(text,terms){const l=text.toLowerCase();let at=-1;for(const t of terms){const k=l.search(new RegExp('\\b'+t));if(k>=0&&(at<0||k<at))at=k}
+    if(at<0||text.length<=150)return text.slice(0,150)+(text.length>150?'…':'');const s=Math.max(0,at-50);return (s?'…':'')+text.slice(s,s+150)+(s+150<text.length?'…':'')}
+  const q=$('site-q'),box=$('sb-results');let cur=[],sel=-1;
+  const SUGG=['Break not deducted','Missing clock-out','Night shift split','Overtime not paid','Wrong shift','No clockings','Reprocess hours','Shows absent','Roster import','Red stop sign'];
+  function open(html){box.innerHTML=html;box.hidden=false;q.setAttribute('aria-expanded','true')}
+  function close(){box.hidden=true;q.setAttribute('aria-expanded','false');sel=-1}
+  function draw(){
+    const v=q.value.trim();
+    if(!v){open('<div class="sb-head">Common issues</div><div class="sb-chips">'+SUGG.map(s=>'<button type="button" data-s="'+esc(s)+'">'+esc(s)+'</button>').join('')+'</div>');cur=[];return}
+    const r=search(v);cur=r.hits;sel=cur.length?0:-1;
+    if(!cur.length){open('<div class="sb-none">Nothing found for “'+esc(v)+'”. Try one or two words, like <b>break</b>, <b>overtime</b> or <b>missing clocking</b>.</div>');return}
+    open('<div class="sb-head">'+cur.length+' result'+(cur.length>1?'s':'')+' · ↑↓ then Enter</div><ul class="sb-list" role="listbox">'+cur.map((h,i)=>'<li role="option" data-i="'+i+'" aria-selected="'+(i===sel)+'"><div class="sb-meta"><span class="sb-type '+(h.e.cls||'')+'">'+h.e.type+'</span><span class="sb-where">'+esc(h.e.where)+'</span></div><div class="sb-title">'+hl(h.e.title,r.words)+'</div><div class="sb-snip">'+hl(snip(h.e.text,r.words),r.words)+'</div></li>').join('')+'</ul>');
+  }
+  function mark(){box.querySelectorAll('.sb-list li').forEach((li,i)=>{li.setAttribute('aria-selected',i===sel);if(i===sel)li.scrollIntoView({block:'nearest'})})}
+  function pick(i){const h=cur[i];if(!h)return;close();q.blur();h.e.go()}
+  q.addEventListener('input',draw);
+  q.addEventListener('focus',draw);
+  q.addEventListener('keydown',e=>{
+    if(e.key==='ArrowDown'&&cur.length){e.preventDefault();sel=(sel+1)%cur.length;mark()}
+    else if(e.key==='ArrowUp'&&cur.length){e.preventDefault();sel=(sel-1+cur.length)%cur.length;mark()}
+    else if(e.key==='Enter'){e.preventDefault();pick(sel<0?0:sel)}
+    else if(e.key==='Escape'){close();q.blur()}
+  });
+  box.addEventListener('mousedown',e=>e.preventDefault());
+  box.addEventListener('click',e=>{const c=e.target.closest('[data-s]');if(c){q.value=c.dataset.s;draw();q.focus();return}const li=e.target.closest('li[data-i]');if(li)pick(+li.dataset.i)});
+  q.addEventListener('blur',()=>setTimeout(close,120));
+  document.addEventListener('keydown',e=>{if(e.key==='/'&&!/^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName)){e.preventDefault();q.focus()}});
 
   // active nav
   const links=[...document.querySelectorAll('nav.rail a')];
