@@ -10,21 +10,22 @@
 <style>
 /* Layout: sticky left rail of chapters + one reading column; a "clock card" motif for times and menu paths */
 :root{
-  --bg:#f3f5f7; --surface:#ffffff; --ink:#15202b; --muted:#56636f; --line:#d9dfe5;
-  --accent:#c2620a; --accent-soft:#fbecdc; --ok:#1f7a4d; --ok-soft:#dff2e8; --hold:#8a5a00; --hold-soft:#fff3d1; --err:#b3261e; --err-soft:#fbe3e1;
-  --code-bg:#e9edf1;
+  --bg:#f2f8f4; --surface:#ffffff; --ink:#0f2418; --muted:#4f665a; --line:#d3e5d9;
+  --accent:#0f8a47; --accent-soft:#e2f4e9; --on-accent:#ffffff; --ok:#13734a; --ok-soft:#dcf1e4; --hold:#8a5a00; --hold-soft:#fff3d1; --err:#b3261e; --err-soft:#fbe3e1;
+  --code-bg:#e7f1ea;
+  --hero-bg:#0c7a3e; --hero-ink:#ffffff; --hero-muted:#d2eedc;
   --f-display:"Archivo", "Helvetica Neue", Arial, sans-serif;
   --f-body:"IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
   --f-mono:"IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --bg:#0f151b; --surface:#172029; --ink:#e6ebf0; --muted:#9aa7b3; --line:#2a3642;
-  --accent:#f0913a; --accent-soft:#3a2614; --ok:#5fcf95; --ok-soft:#14301f; --hold:#f2c25b; --hold-soft:#332810; --err:#ff8a80; --err-soft:#3a1715;
-  --code-bg:#1f2a35; color-scheme:dark }}
+  --bg:#0b1510; --surface:#12211a; --ink:#e3efe7; --muted:#97ad9f; --line:#23392c;
+  --accent:#3ccf7f; --accent-soft:#133222; --on-accent:#05210f; --ok:#5fd79a; --ok-soft:#123020; --hold:#f2c25b; --hold-soft:#332810; --err:#ff8a80; --err-soft:#3a1715;
+  --code-bg:#1a2d22; --hero-bg:#0d3a22; --hero-ink:#f0fbf4; --hero-muted:#a9d9bb; color-scheme:dark }}
 :root[data-theme="dark"]{
-  --bg:#0f151b; --surface:#172029; --ink:#e6ebf0; --muted:#9aa7b3; --line:#2a3642;
-  --accent:#f0913a; --accent-soft:#3a2614; --ok:#5fcf95; --ok-soft:#14301f; --hold:#f2c25b; --hold-soft:#332810; --err:#ff8a80; --err-soft:#3a1715;
-  --code-bg:#1f2a35; color-scheme:dark }
+  --bg:#0b1510; --surface:#12211a; --ink:#e3efe7; --muted:#97ad9f; --line:#23392c;
+  --accent:#3ccf7f; --accent-soft:#133222; --on-accent:#05210f; --ok:#5fd79a; --ok-soft:#123020; --hold:#f2c25b; --hold-soft:#332810; --err:#ff8a80; --err-soft:#3a1715;
+  --code-bg:#1a2d22; --hero-bg:#0d3a22; --hero-ink:#f0fbf4; --hero-muted:#a9d9bb; color-scheme:dark }
 
 *{box-sizing:border-box}
 [hidden]{display:none!important}
@@ -40,7 +41,9 @@ p{margin:0}
 @media (max-width:860px){.layout{grid-template-columns:minmax(0,1fr);gap:24px}}
 
 /* header */
-header.top{border-bottom:1px solid var(--line);background:var(--surface)}
+header.top{background:var(--hero-bg);color:var(--hero-ink)}
+header.top .eyebrow{color:var(--hero-muted)}
+header.top .lede{color:var(--hero-muted)}
 header.top .wrap{padding-block:40px 36px;display:grid;gap:18px}
 .eyebrow{font:500 .75rem/1 var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
 h1{font-size:clamp(2.2rem,5vw,3.4rem);font-weight:800;letter-spacing:-.02em}
@@ -135,7 +138,7 @@ tr:last-child td{border-bottom:0}
 .ledger div{border:1px solid var(--line);border-radius:8px;padding:10px 12px;display:grid;gap:2px}
 .ledger span{font-size:.78rem;color:var(--muted)}
 .ledger b{font:500 1.3rem var(--f-mono);font-variant-numeric:tabular-nums}
-.btn{font:600 .9rem var(--f-body);border:0;border-radius:6px;padding:9px 16px;cursor:pointer;background:var(--accent);color:#fff}
+.btn{font:600 .9rem var(--f-body);border:0;border-radius:6px;padding:9px 16px;cursor:pointer;background:var(--accent);color:var(--on-accent)}
 .btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
 .note{font-size:.85rem;color:var(--muted)}
 .flag{border-left:3px solid var(--hold);background:var(--hold-soft);padding:12px 14px;border-radius:0 8px 8px 0;font-size:.92rem;color:var(--ink)}
@@ -170,7 +173,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .searchbar .wrap{padding-block:12px}
 .sb-inner{position:relative;max-width:820px;display:flex;gap:8px;align-items:stretch}
 .sb-inner>.sb-field{flex:1;min-width:0}
-.sb-ask{flex:none;display:flex;align-items:center;gap:6px;border:0;border-radius:10px;padding:0 16px;background:var(--accent);color:#fff;font:600 .95rem var(--f-body);cursor:pointer}
+.sb-ask{flex:none;display:flex;align-items:center;gap:6px;border:0;border-radius:10px;padding:0 16px;background:var(--accent);color:var(--on-accent);font:600 .95rem var(--f-body);cursor:pointer}
 .sb-ask:hover{filter:brightness(1.08)}
 @media (max-width:560px){.sb-ask span{display:none}.sb-ask{padding:0 12px}}
 .sb-field{display:flex;align-items:center;gap:10px;border:1.5px solid var(--line);border-radius:10px;background:var(--bg);padding:0 12px}
@@ -202,9 +205,9 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 @media (prefers-reduced-motion:reduce){.flash{animation:none;outline:2px solid var(--accent)}}
 
 /* hero ask box */
-.hero-ask{display:grid;gap:12px;max-width:820px;border:2px solid var(--accent);border-radius:14px;background:var(--accent-soft);padding:18px}
+.hero-ask{display:grid;gap:12px;max-width:820px;border:0;border-radius:14px;background:var(--surface);color:var(--ink);padding:18px;box-shadow:0 18px 40px -22px rgba(0,0,0,.6)}
 .hero-ask .ha-top{display:flex;align-items:center;gap:12px}
-.hero-ask .ha-icon{flex:none;width:44px;height:44px;border-radius:12px;background:var(--accent);color:#fff;display:grid;place-items:center}
+.hero-ask .ha-icon{flex:none;width:44px;height:44px;border-radius:12px;background:var(--accent);color:var(--on-accent);display:grid;place-items:center}
 .hero-ask h2{font-size:1.3rem}
 .hero-ask .ha-sub{color:var(--muted);font-size:.92rem}
 .ha-form{display:flex;gap:8px}
@@ -213,12 +216,12 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .ha-form .btn{font-size:1rem;padding:0 22px;border-radius:10px}
 .ha-chips{display:flex;flex-wrap:wrap;gap:6px}
 .ha-chips button{font:500 .85rem var(--f-body);border:1px solid var(--accent);background:var(--surface);color:var(--ink);border-radius:999px;padding:6px 12px;cursor:pointer}
-.ha-chips button:hover{background:var(--accent);color:#fff}
+.ha-chips button:hover{background:var(--accent);color:var(--on-accent)}
 @media (max-width:560px){.ha-form{flex-direction:column}.ha-form .btn{padding:12px}}
 
 /* assistant */
-.ask-fab{position:fixed;right:max(16px,env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:50;display:flex;align-items:center;gap:10px;border:3px solid var(--surface);border-radius:999px;padding:15px 24px;background:var(--accent);color:#fff;font:700 1.05rem var(--f-body);cursor:pointer;box-shadow:0 12px 34px -8px rgba(0,0,0,.55);animation:fabPulse 1.8s ease-out 1s 3}
-.ask-fab:hover{filter:brightness(1.1)}
+.ask-fab{position:fixed;right:max(16px,env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:50;display:flex;align-items:center;gap:10px;border:3px solid var(--surface);border-radius:999px;padding:15px 24px;background:var(--accent);color:var(--on-accent);font:700 1.05rem var(--f-body);cursor:pointer;box-shadow:0 12px 34px -8px rgba(0,0,0,.55);animation:fabPulse 1.8s ease-out 1s 3}
+.ask-fab:hover{filter:brightness(1.08)}
 @keyframes fabPulse{0%{box-shadow:0 12px 34px -8px rgba(0,0,0,.55),0 0 0 0 var(--accent)}70%{box-shadow:0 12px 34px -8px rgba(0,0,0,.55),0 0 0 16px transparent}100%{box-shadow:0 12px 34px -8px rgba(0,0,0,.55),0 0 0 0 transparent}}
 @media (prefers-reduced-motion:reduce){.ask-fab{animation:none}}
 @media (max-width:560px){.ask-fab{padding:11px 16px;font-size:.92rem;gap:8px}}
@@ -252,6 +255,15 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .chat-form .btn{padding:10px 14px}
 .chat-foot{font-size:.72rem;color:var(--muted);padding:0 12px 10px}
 @media (max-width:560px){.chat{right:0;left:0;bottom:0;width:100%;height:calc(100% - env(safe-area-inset-top,0px));border-radius:14px 14px 0 0;padding-bottom:env(safe-area-inset-bottom,0px)}}
+
+/* ecotime today */
+.mods{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:14px}
+.mod{border:1px solid var(--line);border-radius:12px;background:var(--surface);padding:18px;display:grid;gap:10px;align-content:start;min-width:0}
+.mod .mk{font:500 .7rem/1 var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--accent)}
+.mod ul{margin:0;padding-left:18px;display:grid;gap:5px;font-size:.92rem}
+.mod p{font-size:.92rem;color:var(--muted)}
+.roles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+@media (max-width:760px){.roles{grid-template-columns:minmax(0,1fr)}}
 
 /* support desk */
 .desk{display:grid;grid-template-columns:260px minmax(0,1fr);border:1px solid var(--line);border-radius:12px;background:var(--surface);overflow:hidden}
@@ -296,7 +308,7 @@ html{scroll-behavior:smooth}
 
 <header class="top">
   <div class="wrap">
-    <div class="eyebrow">Time &amp; attendance · plain-English guide</div>
+    <div class="eyebrow">Ecotime · plain-English support guide</div>
     <h1>Ecotime Field Guide</h1>
     <p class="lede">The official docs explain each screen on its own. This guide starts with how the pieces fit together: what happens to a clocking between the terminal and the payroll file, how shifts and rosters decide what someone should work, and the two ways to handle overtime.</p>
     <div class="hero-ask">
@@ -333,6 +345,7 @@ html{scroll-behavior:smooth}
     <a href="#big-picture">The big picture</a>
     <a href="#support">Support desk</a>
     <a href="#breaks">Breaks &amp; clockings</a>
+    <a href="#today">Ecotime today</a>
     <a href="#setup">Setting it up</a>
     <a href="#shifts">Shifts &amp; rosters</a>
     <a href="#overtime">Overtime</a>
@@ -459,6 +472,54 @@ Escalated to:</pre>
         </table>
       </div>
       <div class="flag"><b>Roster import trap:</b> a roster import must cover all seven days of the week. If you import fewer days, existing rosters are removed. A later import for the same period replaces the earlier one, and a time of 0:00 is read as midnight. Past rosters can be imported, and the daily hours are reprocessed against them.</div>
+    </section>
+
+    <!-- ECOTIME TODAY -->
+    <section id="today">
+      <div class="eyebrow">From eco-time.com · current</div>
+      <h2>Ecotime today</h2>
+      <div class="prose">
+        <p>The documentation pages are several years old. Eco Time's own website describes what the software does now. This chapter covers the software only. Your clocking devices come from your reseller and connect through <b>Edit Clocks</b> or an integration such as Impro, so the vendor's own hardware is left out.</p>
+      </div>
+
+      <h3>What the time and attendance module does</h3>
+      <div class="mods">
+        <div class="mod"><div class="mk">Shifts</div><h3>Shift handling</h3><ul><li><b>Automatic shift selection</b>: picks the shift that best matches someone's clockings.</li><li><b>Rolling shifts</b> and rostering or scheduling.</li><li>Handles <b>night shifts</b>, allowances and other complex calculations.</li></ul></div>
+        <div class="mod"><div class="mk">Control</div><h3>Overtime &amp; exceptions</h3><ul><li>Overtime authorisation (see <a href="#overtime">Overtime</a>).</li><li>A real-time attendance dashboard.</li><li>Exception-based management and exception reports.</li></ul></div>
+        <div class="mod"><div class="mk">Output</div><h3>Reports &amp; payroll</h3><ul><li>Automated reporting and a wide range of customisable reports.</li><li>Payroll integration, plus an API for BI tools such as Power BI.</li><li>An SMS function for alerts.</li></ul></div>
+      </div>
+      <p class="note">Automatic shift selection is a common cause of "wrong shift" calls. If the site uses it, check whether the clockings fitted a different shift better before you look at the roster.</p>
+
+      <h3>Who can do what on the web interface</h3>
+      <div class="prose"><p>The web interface works in a browser, for both cloud and on-premise installs. What a person can do depends on their role.</p></div>
+      <div class="roles">
+        <div class="panel"><h4 class="eyebrow" style="margin:0">Employee</h4><ul><li>Clock in and out from the browser.</li><li>Add daily hours. These stay <b>pending</b> until a supervisor approves them.</li><li>Apply for leave and check leave balances.</li><li>View their own clockings and daily roster.</li><li>Upload documents such as sick notes.</li></ul></div>
+        <div class="panel"><h4 class="eyebrow" style="margin:0">Supervisor</h4><ul><li>Approve or decline leave and daily hours for their group.</li><li>See clockings, hours (including authorised overtime), leave and exceptions on one screen.</li><li>Edit clockings from the employee window.</li><li>Roster their group and print reports.</li><li><b>View only</b> for personal details.</li></ul></div>
+        <div class="panel"><h4 class="eyebrow" style="margin:0">Web administrator</h4><ul><li>Everything a supervisor can do.</li><li>Change employees' personal details.</li><li>Add new employees.</li></ul></div>
+      </div>
+
+      <h3>Other modules</h3>
+      <div class="mods">
+        <div class="mod"><div class="mk">App</div><h3>Eco cell phone app</h3><ul><li>Android 8 and above.</li><li>Works <b>offline</b> and syncs when it reconnects.</li><li>Logs GPS for each clocking, with a Google Maps link. Geofencing isn't mentioned anywhere.</li><li>Leave and sick-leave requests.</li><li>An administrator must <b>enable mobile access</b> for each employee in the User Module.</li></ul></div>
+        <div class="mod"><div class="mk">Leave</div><h3>Leave management</h3><ul><li>Electronic leave applications from the web or the app.</li><li>Automatic emails tell managers about applications and employees about approvals.</li><li>Tracks balances and leave accrual.</li></ul></div>
+        <div class="mod"><div class="mk">Alerts</div><h3>SMS notifications</h3><ul><li>A <b>licensed</b> feature. Enable it in the license manager first.</li><li>Turn it on in <span class="path">Config<i>›</i>Bells and Features<i>›</i>SMS</span>, then click <b>Get Authorization</b> and send the code to Eco Time to activate it.</li><li>Rules live in <span class="path">User Module<i>›</i>SMS<i>›</i>Notification rules</span>.</li><li>Absent and late alerts fire at the <b>trigger time</b>.</li><li>Messages are limited to 160 characters and can go to the employee or their next of kin.</li></ul></div>
+        <div class="mod"><div class="mk">Payroll</div><h3>Integrations</h3><ul><li>Standard modules for Sage 300, PaySpace, PeopleHR, Gallagher, Impro and HikCentral.</li><li>Any payroll with an import facility can take an export file.</li><li>An API for BI tools such as Power BI.</li></ul></div>
+        <div class="mod"><div class="mk">Costing</div><h3>Labour / job costing</h3><ul><li>Labour cost by department or job.</li><li>Needs the <b>Job Costing module</b>.</li><li>Rules are under <span class="path">Setup<i>›</i>Job Costing<i>›</i>Costings</span>.</li><li>Clocks can be set as job costing clocks, which adds a Job Costing tab.</li></ul></div>
+        <div class="mod"><div class="mk">People</div><h3>HR, access &amp; visitors</h3><ul><li><b>HR</b>: training, disciplinary, equipment issued, dependants and employment history.</li><li><b>Access control</b>: anti-passback, time-of-day rules, making staff clock before they leave, and movement reports.</li><li><b>Visitor management</b>: a paperless visitor log.</li></ul></div>
+      </div>
+
+      <h3>Integration notes for support</h3>
+      <div class="scroll">
+        <table>
+          <thead><tr><th>Integration</th><th>What to know</th></tr></thead>
+          <tbody>
+            <tr><td>PaySpace</td><td>Employees are matched by <b>employee number</b>. A pay run won't generate or upload hours unless its <b>payroll hours date</b> is set. PaySpace needs a cost centre code, which Ecotime doesn't support.</td></tr>
+            <tr><td>Sage 300</td><td>Hours and leave are exported by pay run date. Check the <b>Export History</b> table to see what was uploaded and how Sage responded.</td></tr>
+            <tr><td>Gallagher</td><td>The cardholder list syncs twice a day, at <b>1am and 1pm</b>. A new cardholder won't appear until the next sync.</td></tr>
+            <tr><td>Impro</td><td>Ecotime can import controllers and terminals, employees, cards, companies and departments, and clockings from an Impro database.</td></tr>
+          </tbody>
+        </table>
+      </div>
     </section>
 
     <!-- SETUP -->
@@ -634,7 +695,7 @@ Escalated to:</pre>
     <section id="sources">
       <h2>Sources &amp; gaps</h2>
       <div class="prose">
-        <p>This guide is based on the official Eco Time documentation. Some of those pages are several years old, so menu names in your version may differ slightly. The official docs I could find don't explain <b>rounding, grace periods or automatic break deductions</b>, so the guide doesn't give exact settings for them. It does say where to look: the daily shift rules and macro scripts. The "Support tip" items are general time and attendance practice, not quotes from the docs.</p>
+        <p>This guide is based on the official Eco Time documentation and the current eco-time.com website. Some documentation pages are several years old, so menu names in your version may differ slightly. The official docs I could find don't explain <b>rounding, grace periods or automatic break deductions</b>, so the guide doesn't give exact settings for them. It does say where to look: the daily shift rules and macro scripts. The "Support tip" items are general time and attendance practice, not quotes from the docs.</p>
       </div>
       <ul class="sources">
         <li><a href="https://docs.eco-time.com/indexpage?page=MjkzM1FRNTUwMDFNOUpHUg%3D%3D" target="_blank" rel="noopener">Eco Time: Configuration Module</a></li>
@@ -652,6 +713,15 @@ Escalated to:</pre>
         <li><a href="https://docs.eco-time.com/indexpage?page=MkRVQzlFVTg1Q1pFSlMzSg%3D%3D" target="_blank" rel="noopener">Eco Time: CountTime (macro example)</a></li>
         <li><a href="https://docs.eco-time.com/indexpage?page=SFdTSFJPWlBCQlNWOU01Qg%3D%3D" target="_blank" rel="noopener">Eco Time: System Errors</a></li>
         <li><a href="https://docs.eco-time.com/indexpage?page=VzRNTUZRQ0hZTU05OTBOMQ%3D%3D" target="_blank" rel="noopener">Eco Time: TNA Procedures</a></li>
+        <li><a href="https://eco-time.com/time-and-attendance/" target="_blank" rel="noopener">eco-time.com: Time and Attendance</a></li>
+        <li><a href="https://eco-time.com/eco-time-web-interface-cloud-on-premise-time-tracking/" target="_blank" rel="noopener">eco-time.com: Web Interface</a></li>
+        <li><a href="https://eco-time.com/software/" target="_blank" rel="noopener">eco-time.com: Software</a></li>
+        <li><a href="https://eco-time.com/cell-phone-clocking-app/" target="_blank" rel="noopener">eco-time.com: Cell Phone Clocking App</a></li>
+        <li><a href="https://eco-time.com/leave-management/" target="_blank" rel="noopener">eco-time.com: Leave Management</a></li>
+        <li><a href="https://eco-time.com/time-and-attendance-api-integration/" target="_blank" rel="noopener">eco-time.com: API Integration</a></li>
+        <li><a href="https://docs.eco-time.com/indexpage?page=MVpCNEtTTVc2UjFPS000TA%3D%3D" target="_blank" rel="noopener">Eco Time: Eco SMSes</a></li>
+        <li><a href="https://docs.eco-time.com/indexpage?page=WDA2MUtYMTIwMUs0UFg5Mw%3D%3D" target="_blank" rel="noopener">Eco Time: PaySpace</a></li>
+        <li><a href="https://docs.eco-time.com/indexpage?page=TUdaVlcxS1JaVTI4UFEyTg%3D%3D" target="_blank" rel="noopener">Eco Time: Sage 300</a></li>
         <li><a href="https://support.clockingsystems.co.uk/support/solutions/articles/103000093466-ecotime-shift-rostering-for-overtime-or-authorising-overtime" target="_blank" rel="noopener">Clocking Systems: Shift rostering for overtime or authorising overtime</a></li>
       </ul>
     </section>
@@ -772,7 +842,19 @@ Escalated to:</pre>
     ["Leave Option","The screen for booking leave: Insert opens Update Leave, then pick a type and From/To dates."],
     ["Absent","No clockings on a day the employee was expected to work."],
     ["Eco Time Web","The browser interface. Supervisors can roster staff and manage their team there."],
-    ["Eco Mobile App","The phone app. Employees can submit leave requests."]
+    ["Eco Mobile App","The cell phone app (Android 8+). Staff can clock (works offline and syncs later, with GPS logged) and request leave, including sick leave. Mobile access must be enabled per employee."],
+    ["Automatic shift selection","Ecotime picks the shift that best fits the day's clockings, instead of a fixed or rostered one."],
+    ["Rolling shifts","Shift patterns that rotate over a cycle, such as earlies, lates and nights."],
+    ["Pending (web hours)","Daily hours an employee adds on the web stay pending until a supervisor approves or declines them."],
+    ["Web administrator","A web interface role that can do everything a supervisor can, plus edit personal details and add employees."],
+    ["Trigger time","The time an SMS rule checks and sends, for example for absent or late alerts."],
+    ["Notification rules","SMS alert rules, set in User Module › SMS › Notification rules."],
+    ["SMS Server Client","The part of the Eco Time Server that sends queued SMS alerts."],
+    ["Bells and Features","The Config area where licensed features such as SMS are switched on."],
+    ["Export History","The table showing what was uploaded to payroll (Sage 300, PaySpace) and the response."],
+    ["Payroll hours date","The date a PaySpace pay run needs set before hours can be generated or uploaded."],
+    ["Job Costing module","An add-on for labour costing by department or job. Rules live under Setup › Job Costing › Costings."],
+    ["Exception reporting","Reports that only show what needs attention, such as late starts, missing clockings and absences."]
   ];
   const dl=$('gloss');
   function render(q){q=(q||'').trim().toLowerCase();const m=G.filter(g=>!q||g[0].toLowerCase().includes(q)||g[1].toLowerCase().includes(q));dl.innerHTML=m.length?m.map(g=>'<div><dt>'+g[0]+'</dt><dd>'+g[1]+'</dd></div>').join(''):'<p class="empty">No term matches "'+q.replace(/[<>&"]/g,'')+'". Try a shorter word.</p>'}
@@ -833,7 +915,36 @@ Escalated to:</pre>
      c:[["No clockings recorded","Absent just means no clockings. Did they forget to clock, or use a different terminal? Add the clockings if a manager confirms the hours.",D],
         ["Clocked on an Info or Access clock","Only Pay Clockings count towards hours. Check how the clocking is flagged.",D],
         ["Should be leave","If they really were off, book leave on the Leave Option screen so the day is explained.",D]],
-     esc:"The clockings exist and are flagged as pay clockings, but the day still shows absent."}
+     esc:"The clockings exist and are flagged as pay clockings, but the day still shows absent."},
+    {k:"Shifts",s:"Auto shift picked the wrong shift",said:"“He came in early and it's put him on the wrong shift.”",
+     c:[["Automatic shift selection matched a different shift","With automatic shift selection on, Ecotime picks the shift that best fits the clockings. An unusually early or late clock-in can fit another shift better.",T],
+        ["No roster to pin the shift","A roster entry for the day tells Ecotime which shift to use. Add one in Daily Roster if the employee was meant to work a specific shift.",D],
+        ["Shifts overlap too much","If two shifts have similar times, the wrong one can win. Ask the consultant to review the shift windows.",T]],
+     esc:"Auto selection keeps choosing the wrong shift for a whole group. The shift setup needs reviewing."},
+    {k:"Web",s:"Web hours stuck as pending",said:"“I added my hours on the web but they're not showing.”",
+     c:[["Waiting for supervisor approval","Daily hours added by employees on the web always stay pending until a supervisor approves or declines them.",D],
+        ["Supervisor not in the right group","Supervisors only see requests from their own group. Check that the employee is in that supervisor's group.",D],
+        ["Approved but not processed","After approval, if the hours still don't show, reprocess that date range.",T]],
+     esc:"The hours were approved, reprocessed, and still don't show."},
+    {k:"App",s:"Mobile app clockings missing",said:"“I clocked on my phone but it's not in Ecotime.”",
+     c:[["Phone was offline","The app works offline and syncs when it reconnects. Ask them to open the app with signal or Wi-Fi.",D],
+        ["Mobile access not enabled","An administrator must enable mobile access for the employee in the User Module.",D],
+        ["Unsupported phone","The app needs Android 8 or above.",D],
+        ["Location questions","Each clocking logs GPS with a Google Maps link. Use it to confirm where they clocked.",D]],
+     esc:"The app shows the clocking as sent, mobile access is enabled, and it still never arrives."},
+    {k:"Alerts",s:"SMS alerts not sending",said:"“Managers stopped getting the late and absent texts.”",
+     c:[["SMS Server Client not running","Once a notification rule exists, the SMS Server Client runs in the Eco Time Server window and sends the queue. If the server is stopped, nothing goes out.",D],
+        ["Rule disabled or wrong days","Check the rule is enabled, the right days are ticked under Enabled Days, and the correct employee group is selected.",D],
+        ["Trigger time not reached","Absent alerts only fire at the trigger time, or the time in the employee's day shift rule.",D],
+        ["Service not activated or licensed","SMS needs a licence and an activated sending service (Get Authorization, then Test).",D],
+        ["Wrong number","The alert goes to the mobile number on the employee's record, or to the next of kin set as the Notified Identifier.",D]],
+     esc:"The server client is running, the rule is enabled, Test fails, and the licence looks right. Contact Eco Time to check the sending service."},
+    {k:"Payroll",s:"Payroll upload not working",said:"“The PaySpace / Sage upload didn't send any hours.”",
+     c:[["Payroll hours date not set (PaySpace)","A pay run won't generate or upload hours until its payroll hours date is set.",D],
+        ["Employee number mismatch","PaySpace matches employees by employee number. A different number in either system means that employee is skipped.",D],
+        ["Errors still open","Hours won't calculate correctly while errors remain, so clear the red stop sign first.",D],
+        ["Check what was sent (Sage 300)","The Export History table shows what was uploaded and how Sage replied.",D]],
+     esc:"The export generates fine, but the payroll system rejects it. Send the Export History response to the consultant."}
   ];
   const sym=$('symptoms'),diag=$('diag');
   function showS(i){
