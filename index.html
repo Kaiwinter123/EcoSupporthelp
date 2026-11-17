@@ -287,6 +287,15 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .tag{font:500 .68rem/1 var(--f-mono);letter-spacing:.06em;text-transform:uppercase;padding:4px 6px;border-radius:4px;white-space:nowrap}
 .tag.doc{background:var(--ok-soft);color:var(--ok)}
 .tag.tip{background:var(--code-bg);color:var(--muted)}
+.tag.tik{background:var(--accent);color:var(--on-accent)}
+.tickets{display:grid;gap:14px}
+.ticket-card{border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:10px;background:var(--surface);padding:18px 20px;display:grid;gap:12px;min-width:0}
+.ticket-card .tc-top{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.ticket-card .tc-date{font:500 .78rem var(--f-mono);color:var(--muted)}
+.ticket-card dl{display:grid;grid-template-columns:130px minmax(0,1fr);gap:8px 16px;margin:0;font-size:.93rem}
+.ticket-card dt{font:500 .72rem/1.9 var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.ticket-card dd{margin:0}
+@media (max-width:560px){.ticket-card dl{grid-template-columns:minmax(0,1fr);gap:2px}.ticket-card dd{margin-bottom:8px}}
 .escalate{background:var(--err-soft);border-radius:8px;padding:12px 14px;font-size:.92rem}
 .escalate b{color:var(--err)}
 .legend{display:flex;gap:14px;flex-wrap:wrap;font-size:.85rem;color:var(--muted);align-items:center}
@@ -352,6 +361,7 @@ html{scroll-behavior:smooth}
     <a href="#daily">Daily routine</a>
     <a href="#errors">Fixing errors</a>
     <a href="#leave">Leave</a>
+    <a href="#tickets">Solved tickets</a>
     <a href="#glossary">Glossary</a>
     <a href="#sources">Sources</a>
   </nav>
@@ -375,7 +385,7 @@ html{scroll-behavior:smooth}
       <div class="prose">
         <p>Most Ecotime calls are about one thing: <b>the hours on screen don't match what the person thinks they worked.</b> The cause is nearly always one of three places. Either the clockings are wrong, the wrong shift was applied that day, or an error is stopping the calculation. Pick what the caller is reporting to see the likely causes, most common first.</p>
       </div>
-      <div class="legend"><span class="tag doc">From docs</span> stated in the official Eco Time documentation <span class="tag tip">Support tip</span> general time and attendance practice. Confirm it on the customer's setup.</div>
+      <div class="legend"><span class="tag doc">From docs</span> stated in the official Eco Time documentation <span class="tag tip">Support tip</span> general time and attendance practice. Confirm it on the customer's setup. <span class="tag tik">From our tickets</span> fixed on a real ticket by our team</div>
       <div class="desk">
         <div class="symptoms" role="tablist" aria-label="What is the caller reporting?" id="symptoms"></div>
         <div class="diag" role="tabpanel" id="diag" aria-live="polite"></div>
@@ -385,7 +395,7 @@ html{scroll-behavior:smooth}
       <div class="prose"><p>This is the same journey from <a href="#big-picture">The big picture</a>, used as a checklist. Don't skip ahead to the shift rules until the clockings are right. Bad clockings make every rule look broken.</p></div>
       <ol class="steps">
         <li><div><h3>Clockings for the day</h3><p>Open the employee's clockings for the date range. Are they all there, and do they alternate IN, OUT, IN, OUT? A <b>hand icon</b> means someone already edited that clocking by hand, and the original values are still shown.</p></div></li>
-        <li><div><h3>The shift Ecotime used</h3><p>Check the Daily Roster for that date. Is there a roster entry? If not, which payroll shift is the employee on? Did someone change it recently?</p></div></li>
+        <li><div><h3>The shift Ecotime used</h3><p>Check the Daily Roster for that date. Is there a roster entry? If not, which payroll shift is the employee on? Did someone change it recently? If the <i>expected</i> hours are wrong, check that shift's <b>STD hours</b> for that day.</p></div></li>
         <li><div><h3>Errors and warnings</h3><p>A red stop sign means hours aren't calculating properly yet. Clear the errors first. Warnings, such as a late start, don't block anything. They are only flags.</p></div></li>
         <li><div><h3>Daily hours</h3><p>In <b>Browse Daily Hours</b>, look at which categories the time landed in. Is the overtime sitting in holding, waiting for authorisation?</p></div></li>
         <li><div><h3>Payroll hours</h3><p>In <b>Browse Employee Payroll Hours</b>, check the period totals. Is leave there? Is the period starting on the right day?</p></div></li>
@@ -683,6 +693,17 @@ Escalated to:</pre>
       </ol>
     </section>
 
+    <!-- SOLVED TICKETS -->
+    <section id="tickets">
+      <div class="eyebrow">From our tickets</div>
+      <h2>Solved tickets</h2>
+      <div class="prose">
+        <p>Real Ecotime tickets our team has fixed, newest first. Customer details are left out. These are also included in the search and the helper's answers.</p>
+        <p class="sub"><b>Where you can look and where you can change things:</b> the Web interface and the User Module only let you <i>check</i> clockings and hours. Shift settings such as STD hours are changed in the <b>Configuration Module</b>.</p>
+      </div>
+      <div class="tickets" id="ticket-list"></div>
+    </section>
+
     <!-- GLOSSARY -->
     <section id="glossary">
       <h2>Glossary</h2>
@@ -823,6 +844,8 @@ Escalated to:</pre>
     ["Shift Time Category","A bucket that hours are sorted into, such as Normal Time, Overtime or Holding."],
     ["Shift Time Rates","The rates attached to time categories. Setup › Shifts › Shift Time Rates."],
     ["Daily shift","The rules for one type of day: expected times and how hours become categories. One per day type."],
+    ["STD hours","The standard (expected) hours set on a shift for each day. If they're wrong, the employee's expected hours are wrong for that day. Changed in the Configuration Module."],
+    ["Expected hours","The hours Ecotime expects someone to work on a day, taken from their shift's STD hours."],
     ["Payroll shift","A full pay period made from daily shifts: the employee's normal pattern. Every employee needs one."],
     ["Payroll Shift Start Day","The weekday the payroll shift begins on."],
     ["Daily Roster","A one-day override that puts an employee on a specific daily shift for that date, replacing the pattern."],
@@ -861,7 +884,7 @@ Escalated to:</pre>
   $('g-q').addEventListener('input',e=>render(e.target.value));render('');
 
   // support desk troubleshooter: [title, causeText, docOrTip]
-  const D='doc',T='tip';
+  const D='doc',T='tip',K='tik';
   const S=[
     {k:"Hours",s:"Hours are wrong",said:"“They worked 8 hours but Ecotime shows 6.” or “Way too many hours.”",
      c:[["Missing or duplicate clocking","Look at the day's clockings first. A forgotten clock-out means hours aren't calculated at all, and a double tap flips every direction after it. <b>Fix:</b> add the missing OUT or delete the duplicate, then Process.",D],
@@ -870,6 +893,11 @@ Escalated to:</pre>
         ["Break taken wrongly","Either a break clocking is missing, or the automatic deduction is being applied. See Breaks & clockings.",T],
         ["Not recalculated after a change","Someone fixed a clocking or shift, but the hours were never rebuilt. <b>Fix:</b> press Process, or use Reprocess Hours for the date range.",D]],
      esc:"Hours are wrong for <b>everyone</b> on the same shift after you've confirmed the clockings are fine. That points to the shift rules themselves, so pass it to the consultant who set the system up."},
+    {k:"Hours",s:"Expected hours wrong on certain days",said:"“Her expected hours are wrong, but only on Wednesdays and Thursdays.”",
+     c:[["STD hours set wrong on that day's shift","Find which shift the employee was on for the affected days. Open that shift in the <b>Configuration Module</b> (Setup › Shifts › Daily shifts) and check the <b>STD hours</b> for those days. On one ticket it was set to 9 instead of 8 for Wednesday and Thursday. Correcting it to 8 fixed the expected hours. Reprocess the affected dates afterwards.",K],
+        ["Different shift on those days","The payroll shift can use a different daily shift on some weekdays, or a roster entry can override it. Check which shift was actually used on each wrong day.",D],
+        ["Shift shared by other staff","STD hours belong to the shift, not the person. Changing them affects everyone on that shift, so check whether the others really should be on 9 hours.",T]],
+     esc:"The STD hours look right on the shift, but the expected hours are still wrong after reprocessing."},
     {k:"Breaks",s:"Break wrong or not deducted",said:"“It's taken an hour for lunch but I only had 30 minutes.” or “My break wasn't taken off.”",
      c:[["Does the site clock for breaks?","Ask first. If staff clock out and in for lunch, the problem is almost always a missing or same-direction break clocking.",T],
         ["Missing break clocking","The sequence comes out as IN, OUT, OUT or similar, which gives a same-direction error. <b>Fix:</b> add the missing clocking with the right direction, or change the direction with Ctrl-A or F2 in the clockings list.",D],
@@ -950,7 +978,7 @@ Escalated to:</pre>
   function showS(i){
     [...sym.children].forEach((b,j)=>b.setAttribute('aria-selected',j===i));
     const x=S[i];
-    diag.innerHTML='<p class="said">'+x.said+'</p><div><h4>Likely causes, most common first</h4><ol class="causes">'+x.c.map((c,j)=>'<li><div class="ch"><span class="rank">#'+(j+1)+'</span><span class="ct">'+c[0]+'</span><span class="tag '+c[2]+'">'+(c[2]===D?'From docs':'Support tip')+'</span></div><p>'+c[1]+'</p></li>').join('')+'</ol></div><div class="escalate"><b>Escalate when:</b> '+x.esc+'</div>';
+    diag.innerHTML='<p class="said">'+x.said+'</p><div><h4>Likely causes, most common first</h4><ol class="causes">'+x.c.map((c,j)=>'<li><div class="ch"><span class="rank">#'+(j+1)+'</span><span class="ct">'+c[0]+'</span><span class="tag '+c[2]+'">'+(c[2]===D?'From docs':c[2]===K?'From our tickets':'Support tip')+'</span></div><p>'+c[1]+'</p></li>').join('')+'</ol></div><div class="escalate"><b>Escalate when:</b> '+x.esc+'</div>';
   }
   S.forEach((x,i)=>{const b=document.createElement('button');b.type='button';b.setAttribute('role','tab');b.innerHTML='<small>'+x.k+'</small>'+x.s;b.onclick=()=>showS(i);sym.appendChild(b)});
   showS(0);
@@ -961,6 +989,18 @@ Escalated to:</pre>
   // ---------- site search ----------
   const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
   const strip=h=>{const d=document.createElement('div');d.innerHTML=h;return d.textContent};
+  // ---------- solved tickets (add new ones at the top) ----------
+  const TICKETS=[
+    {date:"2026-11-17",title:"Expected hours wrong on Wednesday and Thursday",area:"Shifts",
+     symptom:"One employee's expected hours were wrong, but only on Wednesdays and Thursdays.",
+     checked:"Checked the employee's clockings and hours in the Web interface and User Module, then identified which shift they were on for those days.",
+     cause:"The shift's STD hours were set to 9 for Wednesday and Thursday instead of 8.",
+     fix:"Changed STD hours to 8 for those days on the shift (Configuration Module). Expected hours were correct afterwards.",
+     where:"Check: Web interface / User Module. Fix: Configuration Module › Setup › Shifts.",
+     tip:"If only certain weekdays are wrong, compare each day's STD hours on the shift. Remember a change affects everyone on that shift."}
+  ];
+  $('ticket-list').innerHTML=TICKETS.map(t=>'<article class="ticket-card"><div class="tc-top"><span class="tag tik">'+esc(t.area)+'</span><span class="tc-date">'+esc(t.date)+'</span></div><h3>'+esc(t.title)+'</h3><dl><dt>Symptom</dt><dd>'+esc(t.symptom)+'</dd><dt>What we checked</dt><dd>'+esc(t.checked)+'</dd><dt>Cause</dt><dd>'+esc(t.cause)+'</dd><dt>Fix</dt><dd><b>'+esc(t.fix)+'</b></dd><dt>Where</dt><dd>'+esc(t.where)+'</dd><dt>Tip</dt><dd>'+esc(t.tip)+'</dd></dl></article>').join('');
+
   function flash(el){if(!el)return;el.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'center'});el.classList.remove('flash');void el.offsetWidth;el.classList.add('flash');setTimeout(()=>el.classList.remove('flash'),2100)}
   const IDX=[];
   // troubleshooter symptoms and their causes
@@ -974,14 +1014,14 @@ Escalated to:</pre>
   stages.forEach((s,i)=>IDX.push({type:'Overview',where:'The big picture',title:s.t+': '+s.d,text:strip(s.body+' '+s.screens.join('. ')),go:()=>{show(i);flash($('stage'))}}));
   // static page content
   const secName=el=>{const s=el.closest('section');const h=s&&s.querySelector('h2');return h?h.textContent:''};
-  document.querySelectorAll('main ol.steps>li, main .check li, main table tbody tr, main .panel, main .opt, main .flag, main section>.prose').forEach(el=>{
+  document.querySelectorAll('main .ticket-card, main ol.steps>li, main .check li, main table tbody tr, main .panel, main .opt, main .flag, main section>.prose').forEach(el=>{
     if(el.closest('#diag,#gloss,#stage,.desk'))return;
     let title,text;
     if(el.matches('tr')){const td=el.querySelectorAll('td');title=td[0].textContent;text=[...td].slice(1).map(t=>t.textContent).join(' — ')}
     else if(el.matches('.check li')){title=el.querySelector('b').textContent;text=el.querySelector('.w').textContent}
     else if(el.matches('.flag')){const b=el.querySelector('b');title=b?b.textContent.replace(/:$/,''):secName(el);text=el.textContent}
     else {const h=el.querySelector('h3,h4');title=h?h.textContent:secName(el);text=el.textContent.replace(title,'')}
-    IDX.push({type:'Guide',where:secName(el),title:title.trim(),text:text.replace(/\s+/g,' ').trim(),go:()=>flash(el)});
+    const isT=el.matches('.ticket-card');IDX.push({type:isT?'Solved ticket':'Guide',cls:isT?'t-term':'',where:secName(el),title:title.trim(),text:text.replace(/\s+/g,' ').trim(),go:()=>flash(el)});
   });
   IDX.forEach(e=>{e.t=e.title.toLowerCase();e.x=(e.text+' '+e.where).toLowerCase()});
 
@@ -1066,7 +1106,7 @@ Escalated to:</pre>
       const c=document.querySelector('main').cloneNode(true);
       c.querySelectorAll('#diag,#gloss,#stage,.desk,#sources ul,script').forEach(n=>n.remove());
       const page=c.textContent.replace(/[ \t]+/g,' ').replace(/\n\s*\n+/g,'\n').trim();
-      const ts=S.map(x=>'PROBLEM: '+x.s+'\nCaller says: '+strip(x.said)+'\n'+x.c.map((c,j)=>'  Cause '+(j+1)+' ['+(c[2]===D?'From docs':'Support tip')+']: '+c[0]+' — '+strip(c[1])).join('\n')+'\n  Escalate when: '+strip(x.esc)).join('\n\n');
+      const ts=S.map(x=>'PROBLEM: '+x.s+'\nCaller says: '+strip(x.said)+'\n'+x.c.map((c,j)=>'  Cause '+(j+1)+' ['+(c[2]===D?'From docs':c[2]===K?'From our tickets':'Support tip')+']: '+c[0]+' — '+strip(c[1])).join('\n')+'\n  Escalate when: '+strip(x.esc)).join('\n\n');
       const gl=G.map(g=>g[0]+': '+g[1]).join('\n');
       const st=stages.map((s,i)=>(i+1)+'. '+s.t+': '+strip(s.body)+' Screens: '+strip(s.screens.join('; '))).join('\n');
       return 'HOW A CLOCKING BECOMES PAY\n'+st+'\n\nSUPPORT DESK TROUBLESHOOTER\n'+ts+'\n\nREST OF THE GUIDE\n'+page+'\n\nGLOSSARY\n'+gl;
